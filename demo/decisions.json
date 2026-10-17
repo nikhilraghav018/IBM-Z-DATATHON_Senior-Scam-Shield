@@ -2,18 +2,18 @@
   {
     "customer": {
       "customer_id": "C3",
-      "name": "Harold Kim",
-      "age": 76,
+      "name": "Daniel Mercer",
+      "age": 67,
       "opted_in": true
     },
     "event": {
-      "event_id": "C3-E001",
+      "event_id": "C3-E101",
       "customer_id": "C3",
-      "timestamp": "2026-10-19T09:00:00",
+      "timestamp": "2026-10-19T08:15:00",
       "type": "login",
       "channel": "online",
       "amount": 0,
-      "from_account": "checking",
+      "from_account": null,
       "to_account": null,
       "payee_id": null,
       "payee_name": null,
@@ -24,9 +24,9 @@
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C3-E001",
+      "event_id": "C3-E101",
       "customer_id": "C3",
-      "timestamp": "2026-10-19T09:00:00",
+      "timestamp": "2026-10-19T08:15:00",
       "action": "allow",
       "triggers_fired": [],
       "chain": [],
@@ -43,9 +43,9 @@
       "money_released": true
     },
     "baseline": {
-      "event_id": "C3-E001",
+      "event_id": "C3-E101",
       "customer_id": "C3",
-      "timestamp": "2026-10-19T09:00:00",
+      "timestamp": "2026-10-19T08:15:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
@@ -56,14 +56,14 @@
   {
     "customer": {
       "customer_id": "C3",
-      "name": "Harold Kim",
-      "age": 76,
+      "name": "Daniel Mercer",
+      "age": 67,
       "opted_in": true
     },
     "event": {
-      "event_id": "C3-E002",
+      "event_id": "C3-E102",
       "customer_id": "C3",
-      "timestamp": "2026-10-19T09:10:00",
+      "timestamp": "2026-10-19T08:25:00",
       "type": "internal_transfer",
       "channel": "online",
       "amount": 200000,
@@ -78,9 +78,9 @@
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C3-E002",
+      "event_id": "C3-E102",
       "customer_id": "C3",
-      "timestamp": "2026-10-19T09:10:00",
+      "timestamp": "2026-10-19T08:25:00",
       "action": "pause",
       "triggers_fired": [
         "T1",
@@ -93,7 +93,7 @@
       "intervention_active": false,
       "risk_score": 35,
       "reasons": [
-        "Oct 19: $200,000 moved from savings to checking (about 200x this customer's usual transfer)",
+        "Oct 19: $200,000 moved from savings to checking (about 133x this customer's usual transfer)",
         "Oct 19: remote-access software was active during this session"
       ],
       "messages": {
@@ -104,9 +104,9 @@
       "money_released": false
     },
     "baseline": {
-      "event_id": "C3-E002",
+      "event_id": "C3-E102",
       "customer_id": "C3",
-      "timestamp": "2026-10-19T09:10:00",
+      "timestamp": "2026-10-19T08:25:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
@@ -116,32 +116,32 @@
   },
   {
     "customer": {
-      "customer_id": "C2",
-      "name": "Betty Ruiz",
-      "age": 81,
+      "customer_id": "C4",
+      "name": "Alice Marston",
+      "age": 49,
       "opted_in": true
     },
     "event": {
-      "event_id": "C2-E001",
-      "customer_id": "C2",
-      "timestamp": "2026-10-19T10:00:00",
-      "type": "cash_withdrawal",
-      "channel": "branch",
-      "amount": 9000,
-      "from_account": "checking",
-      "to_account": null,
+      "event_id": "C4-E101",
+      "customer_id": "C4",
+      "timestamp": "2026-10-19T09:00:00",
+      "type": "internal_transfer",
+      "channel": "online",
+      "amount": 120000,
+      "from_account": "savings",
+      "to_account": "checking",
       "payee_id": null,
       "payee_name": null,
       "payee_category": null,
       "payee_verified": false,
-      "branch_id": "Frisco Main",
+      "branch_id": null,
       "remote_access": false,
-      "truth": "scam"
+      "truth": "normal"
     },
     "decision": {
-      "event_id": "C2-E001",
-      "customer_id": "C2",
-      "timestamp": "2026-10-19T10:00:00",
+      "event_id": "C4-E101",
+      "customer_id": "C4",
+      "timestamp": "2026-10-19T09:00:00",
       "action": "warn",
       "triggers_fired": [
         "T1"
@@ -152,7 +152,7 @@
       "intervention_active": false,
       "risk_score": 20,
       "reasons": [
-        "Oct 19: $9,000 cash withdrawal (about 36x their usual)"
+        "Oct 19: $120,000 moved from savings to checking (about 80x this customer's usual transfer)"
       ],
       "messages": {
         "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.",
@@ -162,9 +162,9 @@
       "money_released": true
     },
     "baseline": {
-      "event_id": "C2-E001",
-      "customer_id": "C2",
-      "timestamp": "2026-10-19T10:00:00",
+      "event_id": "C4-E101",
+      "customer_id": "C4",
+      "timestamp": "2026-10-19T09:00:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
@@ -175,14 +175,14 @@
   {
     "customer": {
       "customer_id": "C8",
-      "name": "Frank Moore",
-      "age": 73,
+      "name": "Charles Reed",
+      "age": 61,
       "opted_in": true
     },
     "event": {
-      "event_id": "C8-E001",
+      "event_id": "C8-E101",
       "customer_id": "C8",
-      "timestamp": "2026-10-19T10:00:00",
+      "timestamp": "2026-10-19T09:10:00",
       "type": "internal_transfer",
       "channel": "online",
       "amount": 30000,
@@ -197,9 +197,9 @@
       "truth": "normal"
     },
     "decision": {
-      "event_id": "C8-E001",
+      "event_id": "C8-E101",
       "customer_id": "C8",
-      "timestamp": "2026-10-19T10:00:00",
+      "timestamp": "2026-10-19T09:10:00",
       "action": "warn",
       "triggers_fired": [
         "T1"
@@ -210,7 +210,7 @@
       "intervention_active": false,
       "risk_score": 20,
       "reasons": [
-        "Oct 19: $30,000 moved from savings to checking (about 30x this customer's usual transfer)"
+        "Oct 19: $30,000 moved from savings to checking (about 25x this customer's usual transfer)"
       ],
       "messages": {
         "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.",
@@ -220,9 +220,67 @@
       "money_released": true
     },
     "baseline": {
-      "event_id": "C8-E001",
+      "event_id": "C8-E101",
       "customer_id": "C8",
-      "timestamp": "2026-10-19T10:00:00",
+      "timestamp": "2026-10-19T09:10:00",
+      "action": "allow",
+      "reasons": [
+        "Allowed: nothing unusual about this single transaction"
+      ],
+      "money_released": true
+    }
+  },
+  {
+    "customer": {
+      "customer_id": "C2",
+      "name": "Evelyn Tillman",
+      "age": 72,
+      "opted_in": true
+    },
+    "event": {
+      "event_id": "C2-E101",
+      "customer_id": "C2",
+      "timestamp": "2026-10-19T09:20:00",
+      "type": "cash_withdrawal",
+      "channel": "branch",
+      "amount": 9000,
+      "from_account": "checking",
+      "to_account": null,
+      "payee_id": null,
+      "payee_name": null,
+      "payee_category": null,
+      "payee_verified": false,
+      "branch_id": "BR-PLANO-2",
+      "remote_access": false,
+      "truth": "scam"
+    },
+    "decision": {
+      "event_id": "C2-E101",
+      "customer_id": "C2",
+      "timestamp": "2026-10-19T09:20:00",
+      "action": "warn",
+      "triggers_fired": [
+        "T1"
+      ],
+      "chain": [
+        "T1"
+      ],
+      "intervention_active": false,
+      "risk_score": 20,
+      "reasons": [
+        "Oct 19: $9,000 cash withdrawal (about 30x their usual)"
+      ],
+      "messages": {
+        "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.",
+        "staff": null,
+        "family": null
+      },
+      "money_released": true
+    },
+    "baseline": {
+      "event_id": "C2-E101",
+      "customer_id": "C2",
+      "timestamp": "2026-10-19T09:20:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
@@ -238,7 +296,7 @@
       "opted_in": true
     },
     "event": {
-      "event_id": "C1-E001",
+      "event_id": "C1-E101",
       "customer_id": "C1",
       "timestamp": "2026-10-19T10:05:00",
       "type": "internal_transfer",
@@ -255,7 +313,7 @@
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C1-E001",
+      "event_id": "C1-E101",
       "customer_id": "C1",
       "timestamp": "2026-10-19T10:05:00",
       "action": "warn",
@@ -268,7 +326,7 @@
       "intervention_active": false,
       "risk_score": 20,
       "reasons": [
-        "Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)"
+        "Oct 19: $150,000 moved from investment to checking (about 100x this customer's usual transfer)"
       ],
       "messages": {
         "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.",
@@ -278,7 +336,7 @@
       "money_released": true
     },
     "baseline": {
-      "event_id": "C1-E001",
+      "event_id": "C1-E101",
       "customer_id": "C1",
       "timestamp": "2026-10-19T10:05:00",
       "action": "allow",
@@ -286,128 +344,6 @@
         "Allowed: nothing unusual about this single transaction"
       ],
       "money_released": true
-    }
-  },
-  {
-    "customer": {
-      "customer_id": "C4",
-      "name": "David Chen",
-      "age": 67,
-      "opted_in": true
-    },
-    "event": {
-      "event_id": "C4-E001",
-      "customer_id": "C4",
-      "timestamp": "2026-10-19T13:30:00",
-      "type": "internal_transfer",
-      "channel": "online",
-      "amount": 120000,
-      "from_account": "savings",
-      "to_account": "checking",
-      "payee_id": null,
-      "payee_name": null,
-      "payee_category": null,
-      "payee_verified": false,
-      "branch_id": null,
-      "remote_access": false,
-      "truth": "normal"
-    },
-    "decision": {
-      "event_id": "C4-E001",
-      "customer_id": "C4",
-      "timestamp": "2026-10-19T13:30:00",
-      "action": "warn",
-      "triggers_fired": [
-        "T1"
-      ],
-      "chain": [
-        "T1"
-      ],
-      "intervention_active": false,
-      "risk_score": 20,
-      "reasons": [
-        "Oct 19: $120,000 moved from savings to checking (about 120x this customer's usual transfer)"
-      ],
-      "messages": {
-        "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.",
-        "staff": null,
-        "family": null
-      },
-      "money_released": true
-    },
-    "baseline": {
-      "event_id": "C4-E001",
-      "customer_id": "C4",
-      "timestamp": "2026-10-19T13:30:00",
-      "action": "allow",
-      "reasons": [
-        "Allowed: nothing unusual about this single transaction"
-      ],
-      "money_released": true
-    }
-  },
-  {
-    "customer": {
-      "customer_id": "C3",
-      "name": "Harold Kim",
-      "age": 76,
-      "opted_in": true
-    },
-    "event": {
-      "event_id": "C3-E003",
-      "customer_id": "C3",
-      "timestamp": "2026-10-20T11:00:00",
-      "type": "wire",
-      "channel": "online",
-      "amount": 200000,
-      "from_account": "checking",
-      "to_account": null,
-      "payee_id": "P-SAFE",
-      "payee_name": "Federal Reserve Safe Account",
-      "payee_category": "unknown",
-      "payee_verified": false,
-      "branch_id": null,
-      "remote_access": false,
-      "truth": "scam"
-    },
-    "decision": {
-      "event_id": "C3-E003",
-      "customer_id": "C3",
-      "timestamp": "2026-10-20T11:00:00",
-      "action": "hold",
-      "triggers_fired": [
-        "T2",
-        "T5"
-      ],
-      "chain": [
-        "T1",
-        "T2",
-        "RA"
-      ],
-      "intervention_active": true,
-      "risk_score": 90,
-      "reasons": [
-        "Oct 19: $200,000 moved from savings to checking (about 200x this customer's usual transfer)",
-        "Oct 20: first payment to a new payee (Federal Reserve Safe Account, $200,000)",
-        "Oct 19: remote-access software was active during this session",
-        "Oct 20: new attempt to move money after the bank already stepped in"
-      ],
-      "messages": {
-        "customer": "This payment is on a short hold while we make sure you are safe. We will call you today.",
-        "staff": "HOLD: senior scam pattern. Call the customer, then the trusted contact. Do not release funds until verified.",
-        "family": "Hi Grace, Harold asked us to let you know if something looked unusual. Please check in with them today."
-      },
-      "money_released": false
-    },
-    "baseline": {
-      "event_id": "C3-E003",
-      "customer_id": "C3",
-      "timestamp": "2026-10-20T11:00:00",
-      "action": "pause",
-      "reasons": [
-        "Flagged: single outflow of $200,000"
-      ],
-      "money_released": false
     }
   },
   {
@@ -418,7 +354,7 @@
       "opted_in": true
     },
     "event": {
-      "event_id": "C1-E002",
+      "event_id": "C1-E102",
       "customer_id": "C1",
       "timestamp": "2026-10-20T11:20:00",
       "type": "wire",
@@ -435,7 +371,7 @@
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C1-E002",
+      "event_id": "C1-E102",
       "customer_id": "C1",
       "timestamp": "2026-10-20T11:20:00",
       "action": "pause",
@@ -449,7 +385,7 @@
       "intervention_active": false,
       "risk_score": 50,
       "reasons": [
-        "Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)",
+        "Oct 19: $150,000 moved from investment to checking (about 100x this customer's usual transfer)",
         "Oct 20: first payment to a gold dealer (Lone Star Bullion, $80,000)"
       ],
       "messages": {
@@ -460,7 +396,7 @@
       "money_released": false
     },
     "baseline": {
-      "event_id": "C1-E002",
+      "event_id": "C1-E102",
       "customer_id": "C1",
       "timestamp": "2026-10-20T11:20:00",
       "action": "pause",
@@ -473,20 +409,20 @@
   {
     "customer": {
       "customer_id": "C5",
-      "name": "Robert Alvarez",
-      "age": 74,
+      "name": "Nina Patel",
+      "age": 63,
       "opted_in": true
     },
     "event": {
-      "event_id": "C5-E001",
+      "event_id": "C5-E101",
       "customer_id": "C5",
-      "timestamp": "2026-10-20T15:00:00",
+      "timestamp": "2026-10-20T12:45:00",
       "type": "payment",
       "channel": "online",
       "amount": 3000,
       "from_account": "checking",
       "to_account": null,
-      "payee_id": "P-HCO",
+      "payee_id": "P-HER",
       "payee_name": "Heritage Coins",
       "payee_category": "gold_dealer",
       "payee_verified": false,
@@ -495,16 +431,16 @@
       "truth": "normal"
     },
     "decision": {
-      "event_id": "C5-E001",
+      "event_id": "C5-E101",
       "customer_id": "C5",
-      "timestamp": "2026-10-20T15:00:00",
+      "timestamp": "2026-10-20T12:45:00",
       "action": "allow",
       "triggers_fired": [],
       "chain": [],
       "intervention_active": false,
       "risk_score": 0,
       "reasons": [
-        "Trusted payee, paid 3 times before"
+        "Trusted payee, paid 5 times before"
       ],
       "messages": {
         "customer": null,
@@ -514,9 +450,9 @@
       "money_released": true
     },
     "baseline": {
-      "event_id": "C5-E001",
+      "event_id": "C5-E101",
       "customer_id": "C5",
-      "timestamp": "2026-10-20T15:00:00",
+      "timestamp": "2026-10-20T12:45:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
@@ -526,190 +462,79 @@
   },
   {
     "customer": {
-      "customer_id": "C4",
-      "name": "David Chen",
+      "customer_id": "C3",
+      "name": "Daniel Mercer",
       "age": 67,
       "opted_in": true
     },
     "event": {
-      "event_id": "C4-E002",
-      "customer_id": "C4",
-      "timestamp": "2026-10-21T09:45:00",
+      "event_id": "C3-E103",
+      "customer_id": "C3",
+      "timestamp": "2026-10-20T14:10:00",
       "type": "wire",
       "channel": "online",
-      "amount": 118500,
+      "amount": 200000,
       "from_account": "checking",
       "to_account": null,
-      "payee_id": "P-CCT",
-      "payee_name": "Collin County Title",
-      "payee_category": "title_escrow",
-      "payee_verified": true,
-      "branch_id": null,
-      "remote_access": false,
-      "truth": "normal"
-    },
-    "decision": {
-      "event_id": "C4-E002",
-      "customer_id": "C4",
-      "timestamp": "2026-10-21T09:45:00",
-      "action": "allow",
-      "triggers_fired": [],
-      "chain": [
-        "T1"
-      ],
-      "intervention_active": false,
-      "risk_score": 20,
-      "reasons": [
-        "Verified payee (Collin County Title)"
-      ],
-      "messages": {
-        "customer": null,
-        "staff": null,
-        "family": null
-      },
-      "money_released": true
-    },
-    "baseline": {
-      "event_id": "C4-E002",
-      "customer_id": "C4",
-      "timestamp": "2026-10-21T09:45:00",
-      "action": "pause",
-      "reasons": [
-        "Flagged: single outflow of $118,500"
-      ],
-      "money_released": false
-    }
-  },
-  {
-    "customer": {
-      "customer_id": "C2",
-      "name": "Betty Ruiz",
-      "age": 81,
-      "opted_in": true
-    },
-    "event": {
-      "event_id": "C2-E002",
-      "customer_id": "C2",
-      "timestamp": "2026-10-21T10:00:00",
-      "type": "cash_withdrawal",
-      "channel": "branch",
-      "amount": 15000,
-      "from_account": "checking",
-      "to_account": null,
-      "payee_id": null,
-      "payee_name": null,
-      "payee_category": null,
+      "payee_id": "P-SAFE",
+      "payee_name": "Federal Reserve Safe Account",
+      "payee_category": "unknown",
       "payee_verified": false,
-      "branch_id": "Allen North",
+      "branch_id": null,
       "remote_access": false,
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C2-E002",
-      "customer_id": "C2",
-      "timestamp": "2026-10-21T10:00:00",
-      "action": "pause",
+      "event_id": "C3-E103",
+      "customer_id": "C3",
+      "timestamp": "2026-10-20T14:10:00",
+      "action": "hold",
       "triggers_fired": [
-        "T1",
-        "T3"
+        "T2",
+        "T5"
       ],
       "chain": [
         "T1",
-        "T3"
+        "T2",
+        "RA"
       ],
-      "intervention_active": false,
-      "risk_score": 40,
+      "intervention_active": true,
+      "risk_score": 90,
       "reasons": [
-        "Oct 21: $15,000 cash withdrawal (about 60x their usual)",
-        "Oct 21: another large outflow within 2 days ($24,000 in the last 7 days)"
+        "Oct 19: $200,000 moved from savings to checking (about 133x this customer's usual transfer)",
+        "Oct 20: first payment to a new payee (Federal Reserve Safe Account, $200,000)",
+        "Oct 19: remote-access software was active during this session",
+        "Oct 20: new attempt to move money after the bank already stepped in"
       ],
       "messages": {
-        "customer": "We've paused this payment to protect you. A member of our team will call you at the phone number we have on file.",
-        "staff": "PAUSE: call the customer on the number on file, not one they give you. Ask: Has anyone asked you to keep this payment secret, or told you what to say to the bank?",
-        "family": null
+        "customer": "This payment is on a short hold while we make sure you are safe. We will call you today.",
+        "staff": "HOLD: senior scam pattern. Call the customer, then the trusted contact. Do not release funds until verified.",
+        "family": "Hi Maya, Daniel asked us to let you know if something looked unusual. Please check in with them today."
       },
       "money_released": false
     },
     "baseline": {
-      "event_id": "C2-E002",
-      "customer_id": "C2",
-      "timestamp": "2026-10-21T10:00:00",
-      "action": "allow",
+      "event_id": "C3-E103",
+      "customer_id": "C3",
+      "timestamp": "2026-10-20T14:10:00",
+      "action": "pause",
       "reasons": [
-        "Allowed: nothing unusual about this single transaction"
+        "Flagged: single outflow of $200,000"
       ],
-      "money_released": true
-    }
-  },
-  {
-    "customer": {
-      "customer_id": "C6",
-      "name": "Linda Park",
-      "age": 69,
-      "opted_in": false
-    },
-    "event": {
-      "event_id": "C6-E001",
-      "customer_id": "C6",
-      "timestamp": "2026-10-21T12:10:00",
-      "type": "cash_withdrawal",
-      "channel": "branch",
-      "amount": 20000,
-      "from_account": "checking",
-      "to_account": null,
-      "payee_id": null,
-      "payee_name": null,
-      "payee_category": null,
-      "payee_verified": false,
-      "branch_id": "Frisco Main",
-      "remote_access": false,
-      "truth": "normal"
-    },
-    "decision": {
-      "event_id": "C6-E001",
-      "customer_id": "C6",
-      "timestamp": "2026-10-21T12:10:00",
-      "action": "warn",
-      "triggers_fired": [
-        "T1"
-      ],
-      "chain": [
-        "T1"
-      ],
-      "intervention_active": false,
-      "risk_score": 20,
-      "reasons": [
-        "Oct 21: $20,000 cash withdrawal (about 80x their usual)"
-      ],
-      "messages": {
-        "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.",
-        "staff": null,
-        "family": null
-      },
-      "money_released": true
-    },
-    "baseline": {
-      "event_id": "C6-E001",
-      "customer_id": "C6",
-      "timestamp": "2026-10-21T12:10:00",
-      "action": "allow",
-      "reasons": [
-        "Allowed: nothing unusual about this single transaction"
-      ],
-      "money_released": true
+      "money_released": false
     }
   },
   {
     "customer": {
       "customer_id": "C3",
-      "name": "Harold Kim",
-      "age": 76,
+      "name": "Daniel Mercer",
+      "age": 67,
       "opted_in": true
     },
     "event": {
-      "event_id": "C3-E004",
+      "event_id": "C3-E104",
       "customer_id": "C3",
-      "timestamp": "2026-10-21T14:00:00",
+      "timestamp": "2026-10-21T11:00:00",
       "type": "cash_withdrawal",
       "channel": "branch",
       "amount": 40000,
@@ -719,14 +544,14 @@
       "payee_name": null,
       "payee_category": null,
       "payee_verified": false,
-      "branch_id": "Richardson",
+      "branch_id": "BR-DALLAS-5",
       "remote_access": false,
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C3-E004",
+      "event_id": "C3-E104",
       "customer_id": "C3",
-      "timestamp": "2026-10-21T14:00:00",
+      "timestamp": "2026-10-21T11:00:00",
       "action": "escalate",
       "triggers_fired": [
         "T1",
@@ -751,14 +576,14 @@
       "messages": {
         "customer": "This payment is still on hold. A branch manager will contact you personally.",
         "staff": "ESCALATE: repeated attempts after a hold. Manager review required. Consider an Adult Protective Services referral.",
-        "family": "Hi Grace, Harold asked us to let you know if something looked unusual. Please check in with them today."
+        "family": "Hi Maya, Daniel asked us to let you know if something looked unusual. Please check in with them today."
       },
       "money_released": false
     },
     "baseline": {
-      "event_id": "C3-E004",
+      "event_id": "C3-E104",
       "customer_id": "C3",
-      "timestamp": "2026-10-21T14:00:00",
+      "timestamp": "2026-10-21T11:00:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
@@ -768,39 +593,102 @@
   },
   {
     "customer": {
-      "customer_id": "C7",
-      "name": "Ana Gomez",
-      "age": 71,
+      "customer_id": "C2",
+      "name": "Evelyn Tillman",
+      "age": 72,
       "opted_in": true
     },
     "event": {
-      "event_id": "C7-E001",
-      "customer_id": "C7",
-      "timestamp": "2026-10-22T09:00:00",
-      "type": "payment",
-      "channel": "online",
-      "amount": 500,
+      "event_id": "C2-E102",
+      "customer_id": "C2",
+      "timestamp": "2026-10-21T12:30:00",
+      "type": "cash_withdrawal",
+      "channel": "branch",
+      "amount": 15000,
       "from_account": "checking",
       "to_account": null,
-      "payee_id": "P-CB",
-      "payee_name": "Coinbase",
-      "payee_category": "crypto_exchange",
+      "payee_id": null,
+      "payee_name": null,
+      "payee_category": null,
       "payee_verified": false,
+      "branch_id": "BR-PLANO-3",
+      "remote_access": false,
+      "truth": "scam"
+    },
+    "decision": {
+      "event_id": "C2-E102",
+      "customer_id": "C2",
+      "timestamp": "2026-10-21T12:30:00",
+      "action": "pause",
+      "triggers_fired": [
+        "T1",
+        "T3"
+      ],
+      "chain": [
+        "T1",
+        "T3"
+      ],
+      "intervention_active": false,
+      "risk_score": 40,
+      "reasons": [
+        "Oct 21: $15,000 cash withdrawal (about 50x their usual)",
+        "Oct 21: another large outflow within 2 days ($24,000 in the last 7 days)"
+      ],
+      "messages": {
+        "customer": "We've paused this payment to protect you. A member of our team will call you at the phone number we have on file.",
+        "staff": "PAUSE: call the customer on the number on file, not one they give you. Ask: Has anyone asked you to keep this payment secret, or told you what to say to the bank?",
+        "family": null
+      },
+      "money_released": false
+    },
+    "baseline": {
+      "event_id": "C2-E102",
+      "customer_id": "C2",
+      "timestamp": "2026-10-21T12:30:00",
+      "action": "allow",
+      "reasons": [
+        "Allowed: nothing unusual about this single transaction"
+      ],
+      "money_released": true
+    }
+  },
+  {
+    "customer": {
+      "customer_id": "C4",
+      "name": "Alice Marston",
+      "age": 49,
+      "opted_in": true
+    },
+    "event": {
+      "event_id": "C4-E102",
+      "customer_id": "C4",
+      "timestamp": "2026-10-21T13:30:00",
+      "type": "wire",
+      "channel": "online",
+      "amount": 118500,
+      "from_account": "checking",
+      "to_account": null,
+      "payee_id": "P-TIT",
+      "payee_name": "Collin County Title",
+      "payee_category": "title_escrow",
+      "payee_verified": true,
       "branch_id": null,
       "remote_access": false,
       "truth": "normal"
     },
     "decision": {
-      "event_id": "C7-E001",
-      "customer_id": "C7",
-      "timestamp": "2026-10-22T09:00:00",
+      "event_id": "C4-E102",
+      "customer_id": "C4",
+      "timestamp": "2026-10-21T13:30:00",
       "action": "allow",
       "triggers_fired": [],
-      "chain": [],
+      "chain": [
+        "T1"
+      ],
       "intervention_active": false,
-      "risk_score": 0,
+      "risk_score": 20,
       "reasons": [
-        "Trusted payee, paid 3 times before"
+        "Verified payee (Collin County Title)"
       ],
       "messages": {
         "customer": null,
@@ -810,9 +698,67 @@
       "money_released": true
     },
     "baseline": {
-      "event_id": "C7-E001",
-      "customer_id": "C7",
-      "timestamp": "2026-10-22T09:00:00",
+      "event_id": "C4-E102",
+      "customer_id": "C4",
+      "timestamp": "2026-10-21T13:30:00",
+      "action": "pause",
+      "reasons": [
+        "Flagged: single outflow of $118,500"
+      ],
+      "money_released": false
+    }
+  },
+  {
+    "customer": {
+      "customer_id": "C6",
+      "name": "Marcus Bell",
+      "age": 58,
+      "opted_in": true
+    },
+    "event": {
+      "event_id": "C6-E101",
+      "customer_id": "C6",
+      "timestamp": "2026-10-21T16:30:00",
+      "type": "cash_withdrawal",
+      "channel": "branch",
+      "amount": 20000,
+      "from_account": "checking",
+      "to_account": null,
+      "payee_id": null,
+      "payee_name": null,
+      "payee_category": null,
+      "payee_verified": false,
+      "branch_id": "BR-DALLAS-3",
+      "remote_access": false,
+      "truth": "normal"
+    },
+    "decision": {
+      "event_id": "C6-E101",
+      "customer_id": "C6",
+      "timestamp": "2026-10-21T16:30:00",
+      "action": "warn",
+      "triggers_fired": [
+        "T1"
+      ],
+      "chain": [
+        "T1"
+      ],
+      "intervention_active": false,
+      "risk_score": 20,
+      "reasons": [
+        "Oct 21: $20,000 cash withdrawal (about 67x their usual)"
+      ],
+      "messages": {
+        "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.",
+        "staff": null,
+        "family": null
+      },
+      "money_released": true
+    },
+    "baseline": {
+      "event_id": "C6-E101",
+      "customer_id": "C6",
+      "timestamp": "2026-10-21T16:30:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
@@ -823,14 +769,14 @@
   {
     "customer": {
       "customer_id": "C8",
-      "name": "Frank Moore",
-      "age": 73,
+      "name": "Charles Reed",
+      "age": 61,
       "opted_in": true
     },
     "event": {
-      "event_id": "C8-E002",
+      "event_id": "C8-E102",
       "customer_id": "C8",
-      "timestamp": "2026-10-22T10:00:00",
+      "timestamp": "2026-10-22T13:15:00",
       "type": "payment",
       "channel": "online",
       "amount": 28000,
@@ -845,9 +791,9 @@
       "truth": "normal"
     },
     "decision": {
-      "event_id": "C8-E002",
+      "event_id": "C8-E102",
       "customer_id": "C8",
-      "timestamp": "2026-10-22T10:00:00",
+      "timestamp": "2026-10-22T13:15:00",
       "action": "allow",
       "triggers_fired": [],
       "chain": [
@@ -866,9 +812,9 @@
       "money_released": true
     },
     "baseline": {
-      "event_id": "C8-E002",
+      "event_id": "C8-E102",
       "customer_id": "C8",
-      "timestamp": "2026-10-22T10:00:00",
+      "timestamp": "2026-10-22T13:15:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
@@ -884,7 +830,7 @@
       "opted_in": true
     },
     "event": {
-      "event_id": "C1-E003",
+      "event_id": "C1-E103",
       "customer_id": "C1",
       "timestamp": "2026-10-22T14:00:00",
       "type": "wire",
@@ -901,7 +847,7 @@
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C1-E003",
+      "event_id": "C1-E103",
       "customer_id": "C1",
       "timestamp": "2026-10-22T14:00:00",
       "action": "hold",
@@ -918,7 +864,7 @@
       "intervention_active": true,
       "risk_score": 95,
       "reasons": [
-        "Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)",
+        "Oct 19: $150,000 moved from investment to checking (about 100x this customer's usual transfer)",
         "Oct 22: payment to a gold dealer (Lone Star Bullion, $60,000)",
         "Oct 22: another large outflow within 2 days ($140,000 in the last 7 days)",
         "Oct 22: new attempt to move money after the bank already stepped in"
@@ -931,7 +877,7 @@
       "money_released": false
     },
     "baseline": {
-      "event_id": "C1-E003",
+      "event_id": "C1-E103",
       "customer_id": "C1",
       "timestamp": "2026-10-22T14:00:00",
       "action": "pause",
@@ -943,13 +889,67 @@
   },
   {
     "customer": {
+      "customer_id": "C7",
+      "name": "Priya Shah",
+      "age": 53,
+      "opted_in": true
+    },
+    "event": {
+      "event_id": "C7-E101",
+      "customer_id": "C7",
+      "timestamp": "2026-10-22T15:10:00",
+      "type": "payment",
+      "channel": "online",
+      "amount": 500,
+      "from_account": "checking",
+      "to_account": null,
+      "payee_id": "P-CBX",
+      "payee_name": "Coinbase",
+      "payee_category": "crypto_exchange",
+      "payee_verified": false,
+      "branch_id": null,
+      "remote_access": false,
+      "truth": "normal"
+    },
+    "decision": {
+      "event_id": "C7-E101",
+      "customer_id": "C7",
+      "timestamp": "2026-10-22T15:10:00",
+      "action": "allow",
+      "triggers_fired": [],
+      "chain": [],
+      "intervention_active": false,
+      "risk_score": 0,
+      "reasons": [
+        "Trusted payee, paid 4 times before"
+      ],
+      "messages": {
+        "customer": null,
+        "staff": null,
+        "family": null
+      },
+      "money_released": true
+    },
+    "baseline": {
+      "event_id": "C7-E101",
+      "customer_id": "C7",
+      "timestamp": "2026-10-22T15:10:00",
+      "action": "allow",
+      "reasons": [
+        "Allowed: nothing unusual about this single transaction"
+      ],
+      "money_released": true
+    }
+  },
+  {
+    "customer": {
       "customer_id": "C1",
       "name": "Margaret Hill",
       "age": 78,
       "opted_in": true
     },
     "event": {
-      "event_id": "C1-E004",
+      "event_id": "C1-E104",
       "customer_id": "C1",
       "timestamp": "2026-10-23T10:30:00",
       "type": "cash_withdrawal",
@@ -961,12 +961,12 @@
       "payee_name": null,
       "payee_category": null,
       "payee_verified": false,
-      "branch_id": "Plano West",
+      "branch_id": "BR-FRISCO-3",
       "remote_access": false,
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C1-E004",
+      "event_id": "C1-E104",
       "customer_id": "C1",
       "timestamp": "2026-10-23T10:30:00",
       "action": "escalate",
@@ -983,7 +983,7 @@
       "intervention_active": true,
       "risk_score": 95,
       "reasons": [
-        "Oct 23: $40,000 cash withdrawal (about 160x their usual)",
+        "Oct 23: $40,000 cash withdrawal (about 133x their usual)",
         "Oct 22: payment to a gold dealer (Lone Star Bullion, $60,000)",
         "Oct 23: another large outflow within 1 day ($180,000 in the last 7 days)",
         "Oct 23: new attempt to move money after the bank already stepped in"
@@ -996,7 +996,7 @@
       "money_released": false
     },
     "baseline": {
-      "event_id": "C1-E004",
+      "event_id": "C1-E104",
       "customer_id": "C1",
       "timestamp": "2026-10-23T10:30:00",
       "action": "allow",
@@ -1009,14 +1009,14 @@
   {
     "customer": {
       "customer_id": "C2",
-      "name": "Betty Ruiz",
-      "age": 81,
+      "name": "Evelyn Tillman",
+      "age": 72,
       "opted_in": true
     },
     "event": {
-      "event_id": "C2-E003",
+      "event_id": "C2-E103",
       "customer_id": "C2",
-      "timestamp": "2026-10-24T10:00:00",
+      "timestamp": "2026-10-24T16:45:00",
       "type": "cash_withdrawal",
       "channel": "branch",
       "amount": 25000,
@@ -1026,14 +1026,14 @@
       "payee_name": null,
       "payee_category": null,
       "payee_verified": false,
-      "branch_id": "McKinney East",
+      "branch_id": "BR-PLANO-4",
       "remote_access": false,
       "truth": "scam"
     },
     "decision": {
-      "event_id": "C2-E003",
+      "event_id": "C2-E103",
       "customer_id": "C2",
-      "timestamp": "2026-10-24T10:00:00",
+      "timestamp": "2026-10-24T16:45:00",
       "action": "hold",
       "triggers_fired": [
         "T1",
@@ -1047,21 +1047,21 @@
       "intervention_active": true,
       "risk_score": 65,
       "reasons": [
-        "Oct 24: $25,000 cash withdrawal (about 100x their usual)",
+        "Oct 24: $25,000 cash withdrawal (about 83x their usual)",
         "Oct 24: another large outflow within 3 days ($49,000 in the last 7 days)",
         "Oct 24: new attempt to move money after the bank already stepped in"
       ],
       "messages": {
         "customer": "This payment is on a short hold while we make sure you are safe. We will call you today.",
         "staff": "HOLD: senior scam pattern. Call the customer, then the trusted contact. Do not release funds until verified.",
-        "family": "Hi Marco, Betty asked us to let you know if something looked unusual. Please check in with them today."
+        "family": "Hi Marta, Evelyn asked us to let you know if something looked unusual. Please check in with them today."
       },
       "money_released": false
     },
     "baseline": {
-      "event_id": "C2-E003",
+      "event_id": "C2-E103",
       "customer_id": "C2",
-      "timestamp": "2026-10-24T10:00:00",
+      "timestamp": "2026-10-24T16:45:00",
       "action": "allow",
       "reasons": [
         "Allowed: nothing unusual about this single transaction"
