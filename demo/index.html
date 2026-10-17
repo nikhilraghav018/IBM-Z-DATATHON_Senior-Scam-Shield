@@ -335,14 +335,14 @@ function sayBlock(to, text, cls){
 // What was actually going on, for the audience only. The engine never reads the
 // `truth` field, and nothing here feeds a decision. It stays hidden until revealed.
 const STORY = {
-  C1: {scam:true,  label:"gold bar scam"},
-  C2: {scam:true,  label:"grandparent scam"},
-  C3: {scam:true,  label:"phantom hacker scam"},
-  C4: {scam:false, label:"buying a house, not a scam"},
-  C5: {scam:false, label:"regular coin collector, not a scam"},
-  C6: {scam:false, label:"buying a car, not a scam"},
-  C7: {scam:false, label:"regular crypto buyer, not a scam"},
-  C8: {scam:false, label:"paying the IRS, not a scam"},
+  C1: {scam:true,  label:"being scammed this week: gold bar"},
+  C2: {scam:true,  label:"being scammed this week: grandparent"},
+  C3: {scam:true,  label:"being scammed this week: phantom hacker"},
+  C4: {scam:false, label:"not being scammed: buying a house"},
+  C5: {scam:false, label:"not being scammed: regular coin collector"},
+  C6: {scam:false, label:"not being scammed: buying a car"},
+  C7: {scam:false, label:"not being scammed: regular crypto buyer"},
+  C8: {scam:false, label:"not being scammed: paying the IRS"},
 };
 
 function rowHTML(item, newday){
