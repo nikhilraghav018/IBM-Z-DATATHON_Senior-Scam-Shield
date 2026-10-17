@@ -37,12 +37,22 @@ Until the engine is ready, return a hard-coded Decision from `demo/sample_decisi
 ## Checklist
 - [x] `api/requirements.txt` (fastapi, uvicorn)
 - [x] `api/main.py`: every endpoint above, CORS on, stub mode until the engine lands (tested locally)
-- [ ] `/health` running on LinuxONE (screenshot it)
-- [x] `Dockerfile` at repo root (written; not yet built on LinuxONE)
-- [ ] Docker image builds and runs on LinuxONE
-- [ ] CORS on, port 8000 open, demo page can reach `/health`
-- [ ] `/events` and `/demo/replay` calling the real engine
-- [ ] Screenshot: `docker ps` + `/health` showing `s390x` (judging evidence)
+- [x] `/health` running on LinuxONE: http://148.100.77.223:8000/health gives `"arch": "s390x", "engine": "real"`
+- [x] `Dockerfile` at repo root
+- [x] Docker image builds and runs on LinuxONE (container `scam-shield-api`)
+- [x] CORS on, port 8000 open, reachable from a laptop browser
+- [x] `/events` and `/demo/replay` calling the real engine (`/demo/replay` serves the sample decisions until real files land in `data/scenarios/`)
+- [x] Screenshot: `docker ps` + `/health` showing `s390x` (judging evidence)
+
+## Redeploy after new commits on main
+On the server, inside `~/IBM-Z-DATATHON_Senior-Scam-Shield`:
+```bash
+git pull origin main
+sudo docker rm -f scam-shield-api
+sudo docker build -t scam-shield-api .
+sudo docker run -d --name scam-shield-api --restart unless-stopped -p 8000:8000 scam-shield-api
+```
+If the demo page suddenly can't connect (for example after a server reboot), rerun `sudo iptables -I INPUT -p tcp --dport 8000 -j ACCEPT`. Never stop the `notebook` container (Jupyter, port 38888).
 
 ## Stub mode vs real engine
 `api/main.py` tries `from engine.engine import Engine` at startup.
