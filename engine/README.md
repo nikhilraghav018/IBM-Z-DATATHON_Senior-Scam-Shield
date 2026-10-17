@@ -21,15 +21,20 @@
 | `test_engine.py` | Checks the "Expected results" table at the bottom of the spec |
 
 ## Checklist
-- [ ] `config.py` with every setting
-- [ ] `profile.py`
-- [ ] `triggers.py` (T1, T2, T3, T5, RA + trusted payee skip)
-- [ ] `engine.py` (action ladder + opt-in cap + 7 day memory)
-- [ ] `messages.py`
-- [ ] Gold bar scenario gives warn, pause, hold, escalate (needs `data/scenarios/gold_bar.json`)
-- [ ] All innocents never paused or held
+- [x] `config.py` with every setting
+- [x] `profile.py`
+- [x] `triggers.py` (T1, T2, T3, T5, RA + trusted payee skip)
+- [x] `engine.py` (action ladder + opt-in cap + 7 day memory)
+- [x] `messages.py`
+- [x] Gold bar scenario gives warn, pause, hold, escalate (tested on `_format_example.json`)
+- [x] All innocents never paused or held (`test_engine.py`, 16 tests)
 - [ ] `replay.py` writes `demo/decisions.json`
 - [ ] `baseline.py` comparison numbers for the pitch
+
+## Run the tests
+```bash
+python -m unittest engine.test_engine -v   # from the repo root, no installs needed
+```
 
 ## Interface the API team will call
 ```python
