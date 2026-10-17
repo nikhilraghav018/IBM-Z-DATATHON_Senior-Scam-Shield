@@ -141,14 +141,22 @@ def decide(event):
 
 
 def load_scenarios():
-    """Every data/scenarios/*.json except files starting with '_' (format examples)."""
+    """Every data/scenarios/*.json except files starting with '_' (format examples).
+
+    A file with broken JSON is skipped (and printed in the server log) so one typo
+    can't take down the whole demo replay.
+    """
     if not SCENARIOS_DIR.is_dir():
         return []
-    return [
-        json.loads(path.read_text())
-        for path in sorted(SCENARIOS_DIR.glob("*.json"))
-        if not path.name.startswith("_")
-    ]
+    scenarios = []
+    for path in sorted(SCENARIOS_DIR.glob("*.json")):
+        if path.name.startswith("_"):
+            continue
+        try:
+            scenarios.append(json.loads(path.read_text()))
+        except json.JSONDecodeError as err:
+            print(f"Skipping {path.name}: not valid JSON ({err})")
+    return scenarios
 
 
 # ---------- endpoints ----------
