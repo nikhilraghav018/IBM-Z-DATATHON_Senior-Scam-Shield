@@ -11,7 +11,17 @@ Next: <what you're starting>
 Blocked on: <nothing, or what you need and from whom>
 -->
 
-## 2:55 PM: Done: demo page for the video (`demo/index.html`)
+## 3:50 PM: Done: merged the two demo pages into one
+Shums and I had both built `demo/index.html`. Combined them rather than picking: his row layout and
+always-visible messages (better for a recording, where nobody can click), my palette and the
+"rule today" comparison column, plus action filters (allowed / warn / pause / hold / escalate) from
+Nikhil's suggestion. It now fetches live from the LinuxONE API and falls back to `decisions.json`.
+Verified against Shums's real scenarios: 3 of 3 scams interrupted versus 2 of 3 for the single
+transaction rule, 0 of 5 ordinary customers stopped versus 1 of 5, $460,000 kept in the bank.
+Next: ML risk score on Telum if there is time after the recording
+Blocked on: nothing
+
+## 2:55 PM: Superseded: first version of the demo page
 Built the page Kamali records. One file, no frameworks. Shows the week as a bank ledger with two
 verdict columns: ours and the single-transaction rule. "Play the week" reveals it a day at a time;
 selecting a row opens the reasons and the customer / teller / family messages. It calls the live API
