@@ -11,6 +11,11 @@ Next: <what you're starting>
 Blocked on: <nothing, or what you need and from whom>
 -->
 
+## 2:10 PM: Done: API deployed on LinuxONE
+Running in Docker on the LinuxONE server as `scam-shield-api`, port 8000 open. http://148.100.77.223:8000/health gives `"arch": "s390x", "engine": "real"` from a laptop browser. Screenshots of `docker ps` + `/health` taken. Redeploy steps are in `api/README.md`.
+Next: redeploy once Shums's scenario files are on main, then check `/demo/replay` shows the real stories
+Blocked on: nothing. Shums: demo page can call `POST http://148.100.77.223:8000/demo/replay` now; it returns the sample decisions until `data/scenarios/*.json` land.
+
 ## 1:40 PM: Done: API works with Rinin's real engine
 Fixed the `test_health` failure Rinin reported (stub test now forces stub mode). Added an end-to-end test: gold bar through the API with the real engine gives warn, pause, hold, escalate, and the same answer on every replay. A scenario file with broken JSON is now skipped instead of crashing `/demo/replay`. 40 tests pass (api + engine).
 Next: build and run the Docker image on LinuxONE, screenshot `/health` showing s390x
