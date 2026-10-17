@@ -84,6 +84,13 @@ select:hover{background:var(--paper-sunk)}
 button:focus-visible,select:focus-visible,.chip:focus-visible{outline:2px solid var(--stamp);outline-offset:2px}
 .hint{font-size:13px;color:var(--ink-faint);margin-left:auto}
 
+/* What was actually happening. Hidden until revealed: the engine never sees this. */
+.story{display:none;margin-top:5px;font-size:12.5px;font-family:var(--mono)}
+body.revealed .story{display:block}
+.story.scam{color:var(--hold)}
+.story.clean{color:var(--allow)}
+.scorenote{font-size:13px;color:var(--ink-soft);margin:14px 0 0;max-width:62ch}
+
 /* ---------- ledger table ---------- */
 table{width:100%;border-collapse:collapse;margin-top:2px}
 thead th{
@@ -167,10 +174,12 @@ tbody tr:hover td{background:var(--paper-sunk)}
       someone on the phone, and five are going about their lives. No card was stolen and no password was
       broken, so every transaction below is the real customer doing what they asked to do.</p>
     <dl class="score" id="score"></dl>
+    <p class="scorenote" id="scorenote"></p>
   </section>
 
   <div class="controls">
     <button id="play" type="button">Play the week</button>
+    <button id="reveal" type="button">Reveal who was being scammed</button>
     <select id="filter" aria-label="Show one customer"><option value="all">Everyone</option></select>
     <div class="chips" id="chips" role="group" aria-label="Filter by what the bank did"></div>
     <span class="hint" id="shown"></span>
@@ -196,6 +205,11 @@ tbody tr:hover td{background:var(--paper-sunk)}
       already stepped in is a hold with an alert to the customer's chosen contact.</p>
     <p><b>The "rule today" column</b> is a simplified version of how banks check payments now: each
       transaction judged on its own, with no memory of the days before it.</p>
+    <p><b>Privacy.</b> A customer chooses their trusted contact in advance, and nothing is sent to
+      anyone unless they opted in. The message to that contact never includes the amount, the payee
+      or any account detail. It only asks them to check in today.</p>
+    <p><b>Who was being scammed</b> is hidden until you press reveal, and it is there for the
+      audience only. The engine never reads it, and no decision on this page used it.</p>
     <p class="mono" id="prov"></p>
   </footer>
 </main>
@@ -304,12 +318,32 @@ function renderScore(s){
     cell("Ordinary customers stopped", `${s.wrong} of ${s.innocent}`, `Rule today: <b>${s.wrongBase} of ${s.innocent}</b>`) +
     cell("Kept inside the bank", money(s.held), `Rule today: <b>${money(s.heldBase)}</b>`) +
     cell("Scored on", "s390x", "IBM LinuxONE, on-site with the bank's data");
+
+  document.getElementById("scorenote").innerHTML =
+    '<b>"Kept inside the bank"</b> counts money that was on its way out of the bank and did not '
+    + 'leave: cash withdrawals, wires and payments that were paused, held or escalated. Moves '
+    + 'between a customer\'s own accounts are not counted, because that money never left. '
+    + '<b>All three victims hear from us on day one.</b> The rule in use today reaches two of them '
+    + 'on day two, and never reaches the third at all.';
 }
 
 function sayBlock(to, text, cls){
   if (!text) return `<div class="say none ${cls}"><div class="to">${to}</div><div class="txt">nothing sent</div></div>`;
   return `<div class="say ${cls}"><div class="to">${to}</div><div class="txt">${esc(text)}</div></div>`;
 }
+
+// What was actually going on, for the audience only. The engine never reads the
+// `truth` field, and nothing here feeds a decision. It stays hidden until revealed.
+const STORY = {
+  C1: {scam:true,  label:"gold bar scam"},
+  C2: {scam:true,  label:"grandparent scam"},
+  C3: {scam:true,  label:"phantom hacker scam"},
+  C4: {scam:false, label:"buying a house, not a scam"},
+  C5: {scam:false, label:"regular coin collector, not a scam"},
+  C6: {scam:false, label:"buying a car, not a scam"},
+  C7: {scam:false, label:"regular crypto buyer, not a scam"},
+  C8: {scam:false, label:"paying the IRS, not a scam"},
+};
 
 function rowHTML(item, newday){
   const {customer:c, event:e, decision:d, baseline:b} = item;
@@ -322,6 +356,9 @@ function rowHTML(item, newday){
     <td class="who">
       <div class="name">${esc(c.name)} <span class="age">${c.age}</span></div>
       <div class="what">${describe(e)}</div>
+      ${STORY[c.customer_id]
+        ? `<div class="story ${STORY[c.customer_id].scam ? "scam" : "clean"}">${esc(STORY[c.customer_id].label)}</div>`
+        : ""}
     </td>
     <td class="verdict">${v(d.action)}${d.action !== "allow" ? `<span class="scorechip">risk ${d.risk_score}</span>` : ""}</td>
     <td class="verdict base">${v(b.action)}</td>
@@ -377,15 +414,24 @@ function buildChips(){
 }
 
 /* The one piece of motion: reveal the week a day at a time, to narrate over. */
+function setReveal(on){
+  document.body.classList.toggle("revealed", on);
+  document.getElementById("reveal").textContent =
+    on ? "Hide who was being scammed" : "Reveal who was being scammed";
+}
+
 function play(){
   const rows = [...document.querySelectorAll("#rows tr")];
   if (!rows.length) return;
   const slow = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   rows.forEach(r => { r.classList.remove("reveal"); r.style.visibility = "hidden"; });
+  setReveal(false);
   rows.forEach((r, i) => setTimeout(() => {
     r.style.visibility = "visible";
     if (!slow) r.classList.add("reveal");
   }, slow ? 0 : i * 420));
+  // The point of the week lands once it has all played out, so reveal at the end.
+  setTimeout(() => setReveal(true), slow ? 400 : rows.length * 420 + 600);
 }
 
 (async function(){
@@ -409,6 +455,8 @@ function play(){
   }
   sel.addEventListener("change", render);
   document.getElementById("play").addEventListener("click", play);
+  document.getElementById("reveal").addEventListener("click",
+    () => setReveal(!document.body.classList.contains("revealed")));
   buildChips();
   render();
 })();
