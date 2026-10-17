@@ -11,6 +11,16 @@ Next: <what you're starting>
 Blocked on: <nothing, or what you need and from whom>
 -->
 
+## 6:10 PM: Done: ML notebook runs on LinuxONE, model runs on Telum
+Ran `ml/scam_risk_model.ipynb` in the Jupyter container on LinuxONE (s390x, nnpa present). Same held-out results as the laptop. TensorFlow's NNPA plugin isn't loaded in this image, so TF is CPU (~4M events/s). Through PyTorch + IBM `torch_nnpa` the same network runs on Telum: 7.2 to 16.9M events/s, 0.89x to 1.14x the CPU (tiny network, data movement dominates). Measured numbers are in `ml/README.md`. Screenshots taken.
+Next: PR to main. Kamali: pitch lines are in the notebook's last cell; please don't claim a Telum speed-up.
+Blocked on: nothing
+
+## 5:05 PM: Done: ML risk score notebook (runs end to end on a laptop)
+`ml/scam_risk_model.ipynb`: 6,000 synthetic customers (2% scam victims), scikit-learn gradient boosting + a Keras network, trained on two scam types and tested on the unseen third at the rules' false-alarm budget. Laptop result: network catches gold bar 41/44, grandparent 50/50, phantom hacker 21/34 (gradient boosting 29/34) at 0.3 to 0.7% false alarms. Exported to `ml/model.json` + a plain-Python scorer. Engine tests pass, actions unchanged. Not wired into the live API (Kamali is recording).
+Next: run the notebook in Jupyter on LinuxONE, screenshots, Telum timing
+Blocked on: nothing
+
 ## 3:25 PM: Done: LinuxONE serves the real scenarios
 Redeployed with Shums's 8 scenario files. `POST http://148.100.77.223:8000/demo/replay` returns 18 live decisions from the real engine: gold bar warn, pause, hold, escalate; grandparent reaches hold; phantom hacker pause, hold, escalate; all 5 innocents only allow/warn. Same result locally and on the server, identical on every replay. 40 tests pass, `data/validate.py` passes.
 Next: on call for redeploys if engine or data changes before judging
