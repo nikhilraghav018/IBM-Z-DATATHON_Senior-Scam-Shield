@@ -23,6 +23,28 @@ Caveat to say out loud: the gradient boosting model leans mostly on `triggers_fi
 compute. The notebook also reports a version without the rule features so you can see what the model
 finds on its own.
 
+## Measured on LinuxONE (s390x, Telum `nnpa` flag present), Oct 17
+
+Held out = the model never saw that scam type in training. Same false-alarm budget as the rules.
+
+| Held-out scam type | Keras network | scikit-learn GB | False alarms (innocent customers) |
+|---|---|---|---|
+| Gold bar | 41/44 | 41/44 | 0.3% to 0.6% |
+| Grandparent | 50/50 | 50/50 | |
+| Phantom hacker | 21/34 | 29/34 | |
+
+Inference speed of the same network (200,000 events):
+
+| | Events per second |
+|---|---|
+| TensorFlow 2.18, CPU (the image's IBM zDNN TF plugin is not loaded, so no NNPA device) | 3.8 to 4.0 million |
+| PyTorch 2.11, CPU | 8.1 / 14.1 / 17.1 million (batch 1,024 / 8,192 / 65,536) |
+| PyTorch 2.11 on **Telum** (`torch_nnpa`, device `"nnpa"`) | 7.2 / 16.1 / 16.9 million: **0.89x / 1.14x / 0.99x the CPU** |
+
+Telum runs the model at about CPU speed, not faster: the network is tiny (18 → 16 → 8 → 1), so moving data
+dominates. Telum's 16-bit maths changes scores by at most 0.002 (20 of 20,000 flag decisions). Say exactly
+this in the pitch; don't claim a speed-up.
+
 ## Run it on LinuxONE
 Open `ml/scam_risk_model.ipynb` in the Jupyter container (port 38888) from inside the repo and
 **Run All**. About a minute. It needs numpy, scikit-learn and tensorflow, which the
