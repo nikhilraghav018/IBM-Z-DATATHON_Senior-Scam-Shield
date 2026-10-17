@@ -217,5 +217,110 @@ class Rules(unittest.TestCase):
         self.assertEqual(set(d["messages"]), {"customer", "staff", "family"})
 
 
+class Compatibility(unittest.TestCase):
+    """Guards the contracts other people's code depends on. Don't delete these.
+
+    They cover the two things most likely to break tonight: hand-written scenario
+    files with slightly-off JSON, and the ML layer being bolted on in step 4.
+    """
+
+    def test_timestamps_with_and_without_timezone_mix(self):
+        """Shums may write "...Z" on some events and not others. Must not crash."""
+        c = "X1"
+        live = [
+            ev(c, 1, "2026-10-19T10:00:00Z", "cash_withdrawal", 9000, channel="branch", branch="A"),
+            ev(c, 2, "2026-10-21T10:00:00", "cash_withdrawal", 15000, channel="branch", branch="B"),
+        ]
+        self.assertEqual(actions(run(customer(c, "Mixed TZ"), history(c), live)), ["warn", "pause"])
+
+    def test_messy_amounts_are_accepted(self):
+        """"$9,000" or null instead of 9000 should still behave sensibly."""
+        c = "X2"
+        live = [
+            ev(c, 1, "2026-10-19T10:00:00", "login", None),
+            ev(c, 2, "2026-10-19T10:05:00", "cash_withdrawal", "$9,000", channel="branch", branch="A"),
+        ]
+        self.assertEqual(actions(run(customer(c, "Messy"), history(c), live)), ["allow", "warn"])
+
+    def test_event_missing_optional_fields(self):
+        c = "X3"
+        live = [{"event_id": "X3-E1", "customer_id": c, "timestamp": "2026-10-19T10:00:00",
+                 "type": "cash_withdrawal", "channel": "branch", "amount": 9000}]
+        self.assertEqual(actions(run(customer(c, "Sparse"), history(c), live)), ["warn"])
+
+    def test_seven_day_boundary_is_inclusive(self):
+        """Exactly 7 days apart still counts as linked; 7 days and a minute does not."""
+        c = "X4"
+        pair = lambda second: [
+            ev(c, 1, "2026-10-19T11:00:00", "cash_withdrawal", 9000, channel="branch", branch="A"),
+            ev(c, 2, second, "cash_withdrawal", 15000, channel="branch", branch="B"),
+        ]
+        self.assertEqual(actions(run(customer(c, "Edge"), history(c), pair("2026-10-26T11:00:00"))),
+                         ["warn", "pause"])
+        self.assertEqual(actions(run(customer(c, "Edge"), history(c), pair("2026-10-26T11:01:00"))),
+                         ["warn", "warn"])
+
+    def test_engines_do_not_share_state(self):
+        """api/main.py builds a fresh Engine on /reset and on every /demo/replay."""
+        c = "X5"
+        first = ev(c, 1, "2026-10-19T10:00:00", "cash_withdrawal", 9000, channel="branch", branch="A")
+        second = ev(c, 2, "2026-10-20T10:00:00", "cash_withdrawal", 15000, channel="branch", branch="B")
+        warm = Engine(); warm.register(customer(c, "Shared"), history(c))
+        warm.process(first); warm.process(second)
+        cold = Engine(); cold.register(customer(c, "Shared"), history(c))
+        self.assertEqual(cold.process(second)["action"], "warn")
+
+    def test_interleaved_customers_stay_separate(self):
+        """/demo/replay feeds all customers' events into one Engine in time order."""
+        eng = Engine()
+        for cid in ("X6", "X7"):
+            eng.register(customer(cid, cid), history(cid))
+        seq = [
+            ev("X6", 1, "2026-10-19T10:00:00", "cash_withdrawal", 9000, channel="branch", branch="A"),
+            ev("X7", 1, "2026-10-19T11:00:00", "cash_withdrawal", 9000, channel="branch", branch="A"),
+            ev("X6", 2, "2026-10-20T10:00:00", "cash_withdrawal", 15000, channel="branch", branch="B"),
+        ]
+        self.assertEqual([eng.process(e)["action"] for e in seq], ["warn", "warn", "pause"])
+
+    def test_scorer_hook_adds_ml_without_changing_the_action(self):
+        """Step 4 plugs a model in here. The rules must still decide the action."""
+        c = "X8"
+        seen = {}
+
+        def model(features):
+            seen.update(features)
+            return {"risk": 0.9, "model": "test"}
+
+        live = [ev(c, 1, "2026-10-19T10:00:00", "cash_withdrawal", 9000, channel="branch", branch="A")]
+        plain = run(customer(c, "NoML"), history(c), live)[0]
+        eng = Engine(scorer=model)
+        eng.register(customer(c, "WithML"), history(c))
+        scored = eng.process(live[0])
+        self.assertNotIn("ml", plain)
+        self.assertEqual(scored["ml"], {"risk": 0.9, "model": "test"})
+        self.assertEqual(scored["action"], plain["action"])
+        self.assertTrue(seen and all(isinstance(v, float) for v in seen.values()))
+
+    def test_decision_matches_contract_even_with_scorer(self):
+        """The demo page and API must keep working when the ML layer is switched on."""
+        c = "X9"
+        eng = Engine(scorer=lambda f: {"risk": 0.1})
+        eng.register(customer(c, "Shape"), history(c))
+        d = eng.process(ev(c, 1, "2026-10-19T10:00:00", "cash_withdrawal", 9000,
+                           channel="branch", branch="A"))
+        required = {"event_id", "customer_id", "timestamp", "action", "triggers_fired", "chain",
+                    "intervention_active", "risk_score", "reasons", "messages", "money_released"}
+        self.assertTrue(required <= set(d))
+        self.assertIn(d["action"], {"allow", "warn", "pause", "hold", "escalate"})
+
+    def test_internal_fields_do_not_leak_into_decisions(self):
+        """`_ts` is internal bookkeeping; it must never reach the API or the demo page."""
+        c = "X10"
+        d = run(customer(c, "Clean"), history(c),
+                [ev(c, 1, "2026-10-19T10:00:00", "cash_withdrawal", 9000, channel="branch", branch="A")])[0]
+        self.assertFalse([k for k in d if k.startswith("_")])
+        json.dumps(d)  # must be JSON-serialisable for FastAPI
+
+
 if __name__ == "__main__":
     unittest.main()

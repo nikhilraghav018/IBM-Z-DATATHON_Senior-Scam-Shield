@@ -16,7 +16,7 @@ from engine import config
 
 def is_trusted_payee(event, profile):
     """Step 0: verified billers, or payees the customer has paid 2+ times before, skip every trigger."""
-    if event["type"] not in ("wire", "payment"):
+    if event.get("type") not in ("wire", "payment"):
         return False
     if event.get("payee_verified"):
         return True
@@ -25,26 +25,26 @@ def is_trusted_payee(event, profile):
 
 
 def is_large_outflow(event):
-    return event["type"] in config.OUTFLOW_TYPES and event["amount"] >= config.LARGE_OUTFLOW
+    return event.get("type") in config.OUTFLOW_TYPES and event["amount"] >= config.LARGE_OUTFLOW
 
 
 def check_t1(event, profile):
     """Unusual move: more than 5x this customer's normal AND more than $5,000."""
     amount = event["amount"]
     if (
-        event["type"] == "internal_transfer"
+        event.get("type") == "internal_transfer"
         and event.get("from_account") in ("savings", "investment")
         and event.get("to_account") == "checking"
     ):
         return amount > max(config.T1_MULTIPLIER * profile["normal_transfer"], config.T1_FLOOR)
-    if event["type"] == "cash_withdrawal":
+    if event.get("type") == "cash_withdrawal":
         return amount > max(config.T1_MULTIPLIER * profile["normal_cash"], config.T1_FLOOR)
     return False
 
 
 def check_t2(event, profile):
     """Risky destination: gold/crypto payee, or a new payee receiving $10,000+."""
-    if event["type"] not in ("wire", "payment"):
+    if event.get("type") not in ("wire", "payment"):
         return False
     if event.get("payee_category") in config.RISKY_CATEGORIES:
         return True
@@ -71,14 +71,14 @@ def check_t5(event, intervention_active):
 
 def check_ra(event, ra_dates):
     """Remote access: this event moves money and remote-control software was seen today."""
-    if event["type"] not in config.MONEY_TYPES:
+    if event.get("type") not in config.MONEY_TYPES:
         return False
     return bool(event.get("remote_access")) or event["_ts"].date() in ra_dates
 
 
 def fired_triggers(event, profile, recent, intervention_active, ra_dates):
     """Return the set of triggers this event fires (empty set if it's trusted or harmless)."""
-    if event["type"] == "login" or is_trusted_payee(event, profile):
+    if event.get("type") == "login" or is_trusted_payee(event, profile):
         return set()
     fired = set()
     if check_t1(event, profile):

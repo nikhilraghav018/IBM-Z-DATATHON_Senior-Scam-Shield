@@ -67,11 +67,11 @@ def family_message(customer, action):
 
 
 def allow_reason(event, profile):
-    if event["type"] == "login":
+    if event.get("type") == "login":
         if event.get("remote_access"):
             return "Remote-access software detected at login; watching this session"
         return "Normal login"
-    if event.get("payee_verified") and event["type"] in ("wire", "payment"):
+    if event.get("payee_verified") and event.get("type") in ("wire", "payment"):
         return f"Verified payee ({event.get('payee_name')})"
     count = profile["payee_counts"].get(event.get("payee_id"), 0)
     if count >= config.TRUSTED_PAYEE_MIN_PAYMENTS:
@@ -83,7 +83,7 @@ def trigger_reason(trigger, record, profile, recent):
     """One plain-English line explaining why `trigger` fired on `record`'s event."""
     e = record["event"]
     if trigger == "T1":
-        if e["type"] == "internal_transfer":
+        if e.get("type") == "internal_transfer":
             ratio = round(e["amount"] / profile["normal_transfer"])
             return (
                 f"{day(e)}: {money(e['amount'])} moved from {e['from_account']} to checking "

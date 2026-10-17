@@ -8,9 +8,10 @@ Interface used by api/main.py, keep these names stable:
 Pure Python standard library, so it runs on LinuxONE (s390x) with no installs.
 """
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from engine import config, messages
+from engine.parsing import clean_event
 from engine.profile import build_profile
 from engine.triggers import fired_triggers, is_large_outflow, is_trusted_payee
 
@@ -18,9 +19,43 @@ CHAIN_ORDER = ("T1", "T2", "T3", "RA")
 
 
 class Engine:
-    def __init__(self):
+    def __init__(self, scorer=None):
+        """`scorer` is an optional extension point for a later ML layer.
+
+        If given, it is called as scorer(features) -> dict for every event, and the result
+        is added to the decision under "ml". The rules still decide the action; the model
+        only adds a number. See features() for what it receives.
+        """
         # customer_id -> {"customer", "profile", "records", "ra_dates"}
         self.customers = {}
+        self.scorer = scorer
+
+    @staticmethod
+    def features(event, profile, chain, fired, recent):
+        """Numbers describing this event in the context of the customer's last 7 days.
+
+        Used by the optional ML layer, both to train on and to score with, so the model
+        sees exactly what the rules see.
+        """
+        window = [r for r in recent if r["large_outflow"]]
+        last_gap = (
+            (event["_ts"] - window[-1]["ts"]).total_seconds() / 86400 if window else -1.0
+        )
+        return {
+            "amount": event["amount"],
+            "amount_vs_normal_transfer": event["amount"] / max(profile["normal_transfer"], 1),
+            "amount_vs_normal_cash": event["amount"] / max(profile["normal_cash"], 1),
+            "is_outflow": float(event.get("type") in config.OUTFLOW_TYPES),
+            "is_risky_category": float(event.get("payee_category") in config.RISKY_CATEGORIES),
+            "is_new_payee": float(profile["payee_counts"].get(event.get("payee_id"), 0) == 0),
+            "is_branch": float(event.get("channel") == "branch"),
+            "remote_access": float(bool(event.get("remote_access"))),
+            "large_outflows_7d": float(len(window)),
+            "total_outflow_7d": sum(r["event"]["amount"] for r in window) + event["amount"],
+            "days_since_last_large_outflow": last_gap,
+            "chain_length": float(len(chain)),
+            "triggers_fired": float(len(fired)),
+        }
 
     def register(self, customer, history):
         """Learn a customer's normal behaviour from their history. Call once before their events."""
@@ -39,9 +74,10 @@ class Engine:
         state = self.customers[cid]
         customer, profile = state["customer"], state["profile"]
 
-        # Work on a copy so we never change the caller's event. Never read event["truth"].
-        ev = {k: v for k, v in event.items() if k != "truth"}
-        ev["_ts"] = now = datetime.fromisoformat(ev["timestamp"])
+        # Work on a normalised copy so we never change the caller's event,
+        # and never read event["truth"].
+        ev = clean_event(event)
+        now = ev["_ts"]
 
         recent = self._recent(state, now)
         intervention_active = any(
@@ -51,7 +87,7 @@ class Engine:
         )
         hold_active = any(r["action"] in config.HOLD_ACTIONS for r in recent)
 
-        if ev["type"] == "login" and ev.get("remote_access"):
+        if ev.get("type") == "login" and ev.get("remote_access"):
             state["ra_dates"].add(now.date())
 
         # Step 1: triggers. Each reason is written now, while "recent" is what came before.
@@ -93,7 +129,7 @@ class Engine:
         if "T5" in fired:
             score += config.SCORE_T5_BONUS
 
-        return {
+        decision = {
             "event_id": ev["event_id"],
             "customer_id": cid,
             "timestamp": ev["timestamp"],
@@ -110,6 +146,11 @@ class Engine:
             },
             "money_released": action in ("allow", "warn"),
         }
+
+        if self.scorer is not None:
+            # The model adds a number; the rules keep deciding the action.
+            decision["ml"] = self.scorer(self.features(ev, profile, chain, fired, recent))
+        return decision
 
     # ---------- helpers ----------
 

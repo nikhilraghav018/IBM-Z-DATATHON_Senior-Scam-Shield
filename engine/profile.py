@@ -8,20 +8,21 @@ regularly takes out $5,000.
 from collections import Counter
 
 from engine import config
+from engine.parsing import to_amount
 
 
 def build_profile(history):
     """Return {"normal_transfer", "normal_cash", "payee_counts"} from a list of history Events."""
     transfers = [
-        e["amount"]
+        to_amount(e.get("amount"))
         for e in history
-        if e["type"] == "internal_transfer" and e.get("to_account") == "checking"
+        if e.get("type") == "internal_transfer" and e.get("to_account") == "checking"
     ]
-    cash = [e["amount"] for e in history if e["type"] == "cash_withdrawal"]
+    cash = [to_amount(e.get("amount")) for e in history if e.get("type") == "cash_withdrawal"]
     payee_counts = Counter(
         e["payee_id"]
         for e in history
-        if e["type"] in ("wire", "payment") and e.get("payee_id")
+        if e.get("type") in ("wire", "payment") and e.get("payee_id")
     )
     return {
         # Spec: "normal" = the largest amount of that type seen in history.
