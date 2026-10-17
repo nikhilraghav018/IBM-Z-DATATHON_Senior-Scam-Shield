@@ -1,0 +1,4 @@
+# Runtime deps for the API. Plain uvicorn (not uvicorn[standard]): its extras need
+# compiled wheels that may not exist for s390x.
+fastapi==0.143.3
+uvicorn==0.54.0
