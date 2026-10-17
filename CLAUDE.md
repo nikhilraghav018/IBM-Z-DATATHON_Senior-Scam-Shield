@@ -23,8 +23,8 @@ A decision engine inside a bank that watches each customer's sequence of money m
 |---|---|---|
 | `engine/` | Rinin | Decision logic |
 | `api/` | Nikhil | FastAPI + Docker on LinuxONE, CORS, integration |
-| `data/` | Shums | Scenario JSON + evidence screenshots |
-| `demo/` | Kamali | Single `index.html`, plain HTML/CSS/JS, no frameworks |
+| `data/` | Shums | Scenario JSON + evidence screenshots, then the demo page |
+| `demo/` | Kamali (pitch video), Shums (demo page) | Video script/slides/recording; page is a single `index.html`, plain HTML/CSS/JS, no frameworks |
 
 Each person should only change files in their own folder. Explain things step by step and keep solutions simple: it's a 24-hour build, so the simplest working solution wins.
 

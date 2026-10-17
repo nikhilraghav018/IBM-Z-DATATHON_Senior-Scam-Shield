@@ -33,7 +33,7 @@ Plus five innocent look-alikes (home buyer, coin collector, car buyer, crypto in
 | `engine/` | The decision engine (plain Python, no dependencies) | Rinin |
 | `api/` | FastAPI service + Docker, deployed on LinuxONE | Nikhil |
 | `data/` | Scenario JSON files + evidence screenshots | Shums |
-| `demo/` | Single-page demo (HTML + JS) | Kamali |
+| `demo/` | Pitch video + single-page demo (HTML + JS) | Kamali (video), Shums (page) |
 
 Each folder has its own `README.md` with a checklist and a ready-made prompt for starting a Claude session.
 
@@ -42,11 +42,11 @@ Each folder has its own `README.md` with a checklist and a ready-made prompt for
 | By | Checkpoint |
 |---|---|
 | 10:30 AM | Everyone has read `docs/CONTRACT.md` and agrees on the JSON shapes |
-| 1:00 PM | `data/scenarios/gold_bar.json` done. Demo shows `demo/sample_decisions.json` |
-| 4:00 PM | Engine handles gold bar correctly. API `/health` running on LinuxONE. **If either is stuck, cut scope now** |
+| 1:00 PM | `data/scenarios/gold_bar.json` done. Video time limit confirmed + script draft |
+| 4:00 PM | Engine handles gold bar correctly. API `/health` running on LinuxONE. Scenario files done, Shums starts the demo page. **If anything is stuck, cut scope now** |
 | 7:00 PM | All 8 scenarios run through the engine. API calls the engine |
-| 9:00 PM | Demo talks to the real API. First full run on LinuxONE + screenshots |
-| Midnight | Bugs fixed, README results filled in. Morning = pitch video + submit |
+| 9:00 PM | Demo page talks to the real API on LinuxONE. Kamali records the demo segment |
+| Midnight | Bugs fixed, README results filled in, video mostly edited. Morning = final cut + submit |
 
 ## Working rules
 

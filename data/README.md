@@ -41,5 +41,8 @@ Typing 90 days of grocery trips by hand is slow and error-prone. Write a small s
 - [ ] Screenshot: `docker ps` showing the API container
 - [ ] Fill in the "Results" section of the root README with the replay numbers
 
+## After the scenario files: build the demo page
+Once all 8 files are pushed (target ~4 PM), you build the demo page that Kamali records for the video. Instructions: `demo/README.md`, Part 2. It needs to be ready to record by 9 PM.
+
 ## Prompt to start a Claude session
 > I'm working on the scenario data for Senior Scam Shield (IBM Z Datathon). Read `CLAUDE.md`, `docs/CONTRACT.md`, `docs/SCENARIOS.md` and `data/scenarios/_format_example.json`. Help me write `data/make_history.py` and then `data/scenarios/gold_bar.json`, step by step.
