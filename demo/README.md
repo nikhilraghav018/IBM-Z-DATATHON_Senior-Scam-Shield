@@ -56,48 +56,53 @@ You can plan all of this now using `sample_decisions.json`. The real page will s
 
 ---
 
-## Part 2: Demo page (Shums, after the scenario files)
+## Part 2: Demo page (built, `demo/index.html`)
 
-**Goal:** one web page that shows the week of events and what the bank decided for each one, with colored badges. This is what the video records.
+The page is written. It is one self-contained file: plain HTML, CSS and JavaScript, no frameworks,
+no build step. Open it and it shows the week as a bank ledger, with two verdict columns side by side:
+what Senior Scam Shield decided, and what a single-transaction rule would have done.
 
-### Keep it simple (on purpose)
-- **One `index.html` file** with plain HTML, CSS and a little JavaScript. No React, no npm, no build tools.
-- **It runs on a laptop.** It does NOT need to run on LinuxONE (only the backend does). It calls the API on LinuxONE.
-- **Don't use Streamlit.** It's hard to install on the LinuxONE server.
+### Open it
+The page needs to be served over http, because browsers block a file opened directly from disk
+from reading `decisions.json`.
 
-### Stage 1: show the sample file
-Load `sample_decisions.json` (already in this folder) and show it as a table:
-
-| Day | Customer | What happened | Action badge | Why (reasons) |
-|---|---|---|---|---|
-
-Badge colors (from CONTRACT.md): allow = green, warn = yellow, pause = orange, hold = red, escalate = dark red or purple.
-
-Nice extras if there's time:
-- Click a row to see the customer / staff / family messages
-- A filter by customer
-- A summary bar: "3 of 3 scams stopped, 0 innocent customers held"
-
-Some browsers block loading a local JSON file from a double-clicked HTML file. Fixes:
-1. Run `python -m http.server 8080` inside `demo/` and open `http://localhost:8080`, or
-2. Paste the JSON into the HTML as `const decisions = [...]` for now.
-
-### Stage 2 (pair with Nikhil): use the real backend
-```javascript
-const res = await fetch("http://148.100.77.223:8000/demo/replay", { method: "POST" });
-const decisions = await res.json();
+```bash
+# from the repo root, with the latest scenario files
+python3 -m engine.replay          # writes demo/decisions.json
+cd demo && python3 -m http.server 8080
+# then open http://localhost:8080
 ```
-Same data shape as `sample_decisions.json`, so nothing else on the page changes.
 
-**If the live connection breaks late at night, that's OK.** The engine writes its real results to `demo/decisions.json`, and the page shows that file instead.
+### Where its data comes from
+It tries three sources in order and shows which one it used in the top right:
+1. `POST http://148.100.77.223:8000/demo/replay`, the live API on LinuxONE. Gives up after 2.5 seconds.
+2. `decisions.json` next to the page, written by `python3 -m engine.replay`.
+3. `sample_decisions.json`, the hand-written examples.
+
+So the demo cannot end up blank during a recording. If the server is unreachable it quietly falls
+back to the file and says so.
+
+**`decisions.json` currently holds placeholder output** built from `docs/SCENARIOS.md` so the page
+is never empty. Once the real `data/scenarios/*.json` are on main, run `python3 -m engine.replay`
+again and it is overwritten with the real thing.
+
+### What to show on camera
+- **Press "Play the week"**: rows appear a day at a time, which gives you something to narrate over.
+- **Pick "Betty Ruiz" from the dropdown**: three cash withdrawals, every one of them allowed by the
+  rule in use today, and the chain catches her on the second. This is the clearest moment in the demo.
+- **Select any row with a verdict**: it opens to show the reasons, the message to the customer, the
+  script for the teller, and the note to her trusted contact.
+- The right-hand column staying flat while the left climbs is the argument. Let it sit on screen.
+
+### If you want to change it
+It is one file, about 400 lines, with the CSS at the top and the JavaScript at the bottom.
+Colours are variables in `:root`. Ask Rinin or Nikhil before changing the data shape, since it
+follows `docs/CONTRACT.md`.
 
 ### Checklist
-- [ ] Page shows every row of `sample_decisions.json`
-- [ ] Colored badges match the action
-- [ ] Reasons visible for each row
-- [ ] Messages (customer / staff / family) visible somehow
-- [ ] Works with the real API on LinuxONE (with Nikhil)
-- [ ] Ready for Kamali to record by 9 PM
-
-### Prompt to start a Claude session
-> I'm building the demo page for Senior Scam Shield (IBM Z Datathon). Read `CLAUDE.md`, `docs/CONTRACT.md` and `demo/README.md` (Part 2), then look at `demo/sample_decisions.json`. Help me build `demo/index.html` as a single file with plain HTML, CSS and JavaScript that shows the decisions as a table with colored action badges. Explain each part as we go.
+- [x] Page shows every row with colored verdicts
+- [x] Reasons and the customer / teller / family messages on a row
+- [x] Falls back to a file if the API is unreachable
+- [x] Works at phone width
+- [ ] Pointed at the live API on the night (open it and check the top right says "live from LinuxONE")
+- [ ] Re-run `python3 -m engine.replay` once Shums's scenarios are on main

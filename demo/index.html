@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Senior Scam Shield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Safety paper: the stock a passbook or a cheque is printed on. */
+  --paper:#F2F4F1;
+  --paper-sunk:#E8EBE6;
+  --ink:#16242B;
+  --ink-soft:#54625F;
+  --ink-faint:#8A9691;
+  --rule:#CDD5CF;
+  --stamp:#2E5E7E;
+
+  /* Severity ramps darker, not brighter. Weight reads as gravity. */
+  --allow:#6F7D74;
+  --warn:#9A6B1E;
+  --pause:#B0501F;
+  --hold:#96241C;
+  --escalate:#5A1512;
+
+  --sans:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --serif:"IBM Plex Serif",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.5;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--rule);padding:18px 0}
+.masthead .wrap{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.wordmark{font-family:var(--serif);font-weight:600;font-size:17px;letter-spacing:-.01em}
+.wordmark span{color:var(--ink-faint);font-weight:400}
+.conn{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+  display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ink-faint);flex:none}
+.conn.live .dot{background:#2F7D4F}
+.conn.file .dot{background:var(--warn)}
+
+/* ---------- hero ---------- */
+.hero{padding:44px 0 0}
+h1{
+  font-family:var(--serif);font-weight:400;font-size:clamp(34px,5.4vw,58px);
+  line-height:1.06;letter-spacing:-.02em;margin:0 0 18px;max-width:17ch;
+}
+h1 em{font-style:italic}
+.standfirst{font-size:18px;line-height:1.6;color:var(--ink-soft);max-width:62ch;margin:0}
+
+/* ---------- scoreboard ---------- */
+.score{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:2px solid var(--ink);margin-top:38px;
+}
+.cell{padding:18px 20px 20px;border-right:1px solid var(--rule)}
+.cell:last-child{border-right:0}
+.cell dt{font-size:13px;color:var(--ink-soft);margin:0 0 10px}
+.cell dd{margin:0;font-family:var(--mono);font-size:clamp(24px,3.1vw,32px);line-height:1;font-weight:500}
+.versus{margin-top:9px;font-size:12.5px;color:var(--ink-faint);line-height:1.35}
+.versus b{font-weight:500;color:var(--ink-soft)}
+
+/* ---------- controls ---------- */
+.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  padding:20px 0 14px;border-top:1px solid var(--rule);margin-top:34px}
+button,select{font:inherit;font-size:14px;color:var(--ink);
+  background:transparent;border:1px solid var(--ink);border-radius:2px;
+  padding:8px 15px;cursor:pointer}
+button:hover,select:hover{background:var(--ink);color:var(--paper)}
+select:hover{background:var(--paper-sunk);color:var(--ink)}
+button:focus-visible,select:focus-visible,.row:focus-visible{outline:2px solid var(--stamp);outline-offset:2px}
+.hint{font-size:13px;color:var(--ink-faint);margin-left:auto}
+
+/* ---------- ledger ---------- */
+.colhead{
+  display:grid;grid-template-columns:76px 1fr 124px 112px;gap:0;
+  border-bottom:2px solid var(--ink);padding-bottom:7px;
+  font-size:12px;color:var(--ink-soft);
+}
+.colhead .us{color:var(--ink);font-weight:600}
+.colhead div:nth-child(3),.colhead div:nth-child(4){text-align:right}
+.ledger{border-bottom:1px solid var(--rule)}
+.row{
+  display:grid;grid-template-columns:76px 1fr 124px 112px;
+  border-bottom:1px solid var(--rule);padding:14px 0;
+  cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;
+  width:100%;text-align:left;align-items:baseline;
+}
+.row:hover{background:var(--paper-sunk);color:inherit}
+.row.newday{border-top:1px solid var(--ink);margin-top:-1px}
+.day{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);padding-left:2px}
+.day .d{display:block;font-size:19px;color:var(--ink);line-height:1.1}
+.who{font-weight:600;font-size:15px}
+.who .age{font-weight:400;color:var(--ink-faint)}
+.what{color:var(--ink-soft);font-size:15px;margin-top:2px}
+.what .amt{font-family:var(--mono);color:var(--ink)}
+.verdict{text-align:right;padding-right:2px}
+.v{font-size:12px;font-weight:600;letter-spacing:.02em;display:inline-block;
+  padding:3px 9px;border-radius:2px;color:#fff;white-space:nowrap}
+.v-allow{background:none;color:var(--ink-faint);font-weight:400;padding-right:0}
+.v-warn{background:var(--warn)}
+.v-pause{background:var(--pause)}
+.v-hold{background:var(--hold)}
+.v-escalate{background:var(--escalate)}
+.scorechip{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-top:5px}
+
+/* expanded detail */
+.detail{grid-column:1/-1;padding:4px 0 2px 76px;display:none}
+.row.open .detail{display:block}
+.row.open{background:var(--paper-sunk)}
+.reasons{margin:12px 0 0;padding:0;list-style:none;max-width:72ch}
+.reasons li{font-size:14.5px;color:var(--ink);padding:3px 0 3px 16px;position:relative}
+.reasons li::before{content:"";position:absolute;left:0;top:12px;width:8px;height:1px;background:var(--ink-faint)}
+.says{margin-top:14px;display:grid;gap:10px;max-width:78ch}
+.say{display:grid;grid-template-columns:92px 1fr;gap:14px;font-size:14px;align-items:start}
+.say dt{color:var(--ink-faint);font-size:12.5px;padding-top:2px}
+.say dd{margin:0;color:var(--ink);font-family:var(--serif);line-height:1.5}
+.say.fam dd{color:var(--stamp)}
+
+/* ---------- footer ---------- */
+.foot{border-top:2px solid var(--ink);margin-top:56px;padding:26px 0 64px;
+  display:flex;gap:28px;flex-wrap:wrap;font-size:13.5px;color:var(--ink-soft)}
+.foot p{margin:0;max-width:52ch}
+.foot .mono{font-family:var(--mono);font-size:12px;color:var(--ink-faint)}
+.empty{padding:40px 0;color:var(--ink-soft);font-size:15px}
+
+@media (max-width:720px){
+  .score{grid-template-columns:1fr 1fr;border-top-width:2px}
+  .cell{border-bottom:1px solid var(--rule)}
+  .cell:nth-child(2){border-right:0}
+  .colhead,.row{grid-template-columns:56px 1fr 84px}
+  .colhead div:nth-child(4),.row .verdict.base{display:none}
+  .detail{padding-left:56px}
+  .hero{padding:36px 0 28px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .row.reveal{animation:settle .34s ease-out both}
+  @keyframes settle{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="wordmark">Senior Scam Shield <span>/ fraud operations</span></div>
+    <div class="conn" id="conn"><span class="dot"></span><span id="connText">connecting</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Every step looked <em>normal</em> on its own.</h1>
+    <p class="standfirst">One week at one bank. Three older customers are being talked through a scam by someone
+      on the phone, and five are going about their lives. No card was stolen and no password was broken,
+      so every transaction below is the real customer doing what they asked to do.</p>
+
+    <dl class="score" id="score"></dl>
+  </section>
+
+  <div class="controls">
+    <button id="play" type="button">Play the week</button>
+    <select id="filter" aria-label="Show one customer"><option value="all">Everyone</option></select>
+    <span class="hint">Select a row for the reasons and what the bank said</span>
+  </div>
+
+  <div class="colhead">
+    <div>Day</div><div>Customer and transaction</div>
+    <div class="us">Shield decision</div><div>Rule today</div>
+  </div>
+  <div class="ledger" id="ledger"><p class="empty">Loading the week.</p></div>
+
+  <footer class="foot">
+    <p><b>How a decision is made.</b> Warning signs from the last seven days are linked together.
+      One sign is a warning, two is a pause and a phone call, three or any attempt after the bank has
+      already stepped in is a hold with an alert to the customer's chosen contact.</p>
+    <p><b>The column on the right</b> is a simplified version of how banks check payments now: each
+      transaction judged on its own, with no memory of the days before it.</p>
+    <p class="mono" id="prov"></p>
+  </footer>
+</main>
+
+<script>
+const API = "http://148.100.77.223:8000/demo/replay";
+const ORDER = {allow:0, warn:1, pause:2, hold:3, escalate:4};
+const STOPPED = new Set(["pause","hold","escalate"]);
+const OUTFLOW = new Set(["cash_withdrawal","wire","payment"]);
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
+
+/* The single-transaction rule, in case the data source didn't include it:
+   flag one very large outflow, or a large wire to a payee not seen before.
+   No memory of earlier days. Mirrors engine/baseline.py. */
+function addBaseline(items){
+  const seen = {};
+  for (const it of items){
+    if (it.baseline) continue;
+    const e = it.event, cid = e.customer_id, amt = Number(e.amount) || 0;
+    const known = seen[cid] || (seen[cid] = new Set());
+    let flagged = false;
+    if (OUTFLOW.has(e.type)){
+      if (amt >= 50000) flagged = true;
+      else if (e.type === "wire" && amt >= 25000 && e.payee_id && !known.has(e.payee_id)) flagged = true;
+    }
+    if (e.payee_id) known.add(e.payee_id);
+    it.baseline = {action: flagged ? "pause" : "allow", money_released: !flagged};
+  }
+  return items;
+}
+
+async function load(){
+  const conn = document.getElementById("conn"), text = document.getElementById("connText");
+  try{
+    // Give up on the server quickly. A slow network must not leave the demo
+    // sitting on a blank page while someone is presenting it.
+    const res = await fetch(API, {method:"POST", signal: AbortSignal.timeout(2500)});
+    if (!res.ok) throw new Error(res.status);
+    const items = await res.json();
+    if (!items.length) throw new Error("empty");
+    conn.className = "conn live";
+    text.textContent = "live from LinuxONE · 148.100.77.223";
+    document.getElementById("prov").textContent =
+      "Decisions scored live on IBM LinuxONE (s390x) at " + API;
+    return items;
+  }catch(err){
+    for (const file of ["decisions.json","sample_decisions.json"]){
+      try{
+        const res = await fetch(file);
+        if (!res.ok) continue;
+        const items = await res.json();
+        conn.className = "conn file";
+        text.textContent = "reading " + file;
+        document.getElementById("prov").textContent =
+          "Decisions produced by the engine on IBM LinuxONE (s390x), replayed from " + file;
+        return items;
+      }catch(e){ /* try the next one */ }
+    }
+    conn.className = "conn file";
+    text.textContent = "no data";
+    return [];
+  }
+}
+
+function describe(e){
+  const amt = n => '<span class="amt">' + money(n) + '</span>';
+  switch (e.type){
+    case "internal_transfer": return "moved " + amt(e.amount) + " from " + (e.from_account||"savings") + " into checking";
+    case "cash_withdrawal":   return "withdrew " + amt(e.amount) + " in cash" + (e.branch_id ? " at " + e.branch_id : "");
+    case "wire":              return "wired " + amt(e.amount) + " to " + (e.payee_name||"a new payee");
+    case "payment":           return "paid " + amt(e.amount) + " to " + (e.payee_name||"a payee");
+    case "deposit":           return "deposited " + amt(e.amount);
+    case "login":             return e.remote_access ? "signed in while remote-control software was running" : "signed in";
+    default:                  return e.type;
+  }
+}
+
+function scoreboard(items){
+  const scam = new Set(), all = new Set();
+  for (const i of items){
+    all.add(i.customer.customer_id);
+    if (i.event.truth === "scam") scam.add(i.customer.customer_id);
+  }
+  const innocent = [...all].filter(c => !scam.has(c));
+  const everStopped = (cid, key) => items.some(i =>
+    i.customer.customer_id === cid && STOPPED.has(i[key].action));
+
+  // Money that would have left the bank and did not. Outflows only: a move between
+  // a customer's own accounts is not money saved.
+  const held = key => items.reduce((sum, i) =>
+    sum + (i.event.truth === "scam" && OUTFLOW.has(i.event.type) && !i[key].money_released
+      ? Number(i.event.amount) || 0 : 0), 0);
+
+  return {
+    stopped: [...scam].filter(c => everStopped(c, "decision")).length,
+    stoppedBase: [...scam].filter(c => everStopped(c, "baseline")).length,
+    scams: scam.size,
+    wrong: innocent.filter(c => everStopped(c, "decision")).length,
+    wrongBase: innocent.filter(c => everStopped(c, "baseline")).length,
+    innocent: innocent.length,
+    held: held("decision"), heldBase: held("baseline"),
+  };
+}
+
+function renderScore(s){
+  const cell = (label, value, versus) =>
+    `<div class="cell"><dt>${label}</dt><dd>${value}</dd><div class="versus">${versus}</div></div>`;
+  document.getElementById("score").innerHTML =
+    cell("Scams interrupted", `${s.stopped} of ${s.scams}`,
+         `Rule in use today: <b>${s.stoppedBase} of ${s.scams}</b>`) +
+    cell("Ordinary customers stopped", `${s.wrong} of ${s.innocent}`,
+         `Rule in use today: <b>${s.wrongBase} of ${s.innocent}</b>`) +
+    cell("Kept inside the bank", money(s.held),
+         `Rule in use today: <b>${money(s.heldBase)}</b>`) +
+    cell("Scored on", "s390x", "IBM LinuxONE, on-site with the bank's data");
+}
+
+function rowHTML(item, newday){
+  const {customer:c, event:e, decision:d, baseline:b} = item;
+  const when = new Date(e.timestamp);
+  const day = when.toLocaleDateString("en-US",{weekday:"short"});
+  const num = when.getDate();
+  const v = a => `<span class="v v-${a}">${a === "allow" ? "allowed" : a}</span>`;
+  const says = [
+    ["To the customer", d.messages && d.messages.customer, ""],
+    ["To the teller", d.messages && d.messages.staff, ""],
+    ["To her contact", d.messages && d.messages.family, "fam"],
+  ].filter(s => s[1]);
+
+  return `<div class="row${newday ? " newday":""}" tabindex="0" role="button" aria-expanded="false">
+    <div class="day">${day}<span class="d">${num}</span></div>
+    <div>
+      <div class="who">${c.name} <span class="age">${c.age}</span></div>
+      <div class="what">${describe(e)}</div>
+      <div class="detail">
+        ${d.reasons && d.reasons.length ? `<ul class="reasons">${d.reasons.map(r=>`<li>${r}</li>`).join("")}</ul>` : ""}
+        ${says.length ? `<dl class="says">${says.map(([k,val,cls])=>
+          `<div class="say ${cls}"><dt>${k}</dt><dd>${val}</dd></div>`).join("")}</dl>` : ""}
+      </div>
+    </div>
+    <div class="verdict">${v(d.action)}${d.action!=="allow"?`<span class="scorechip">risk ${d.risk_score}</span>`:""}</div>
+    <div class="verdict base">${v(b.action)}</div>
+  </div>`;
+}
+
+let ITEMS = [];
+
+function render(filter){
+  const shown = filter === "all" ? ITEMS : ITEMS.filter(i => i.customer.customer_id === filter);
+  const ledger = document.getElementById("ledger");
+  if (!shown.length){ ledger.innerHTML = '<p class="empty">No transactions to show.</p>'; return; }
+  let last = null;
+  ledger.innerHTML = shown.map(i => {
+    const day = i.event.timestamp.slice(0,10);
+    const newday = day !== last; last = day;
+    return rowHTML(i, newday);
+  }).join("");
+  for (const row of ledger.querySelectorAll(".row")){
+    const toggle = () => {
+      const open = row.classList.toggle("open");
+      row.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    row.addEventListener("click", toggle);
+    row.addEventListener("keydown", ev => {
+      if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); toggle(); }
+    });
+  }
+}
+
+/* The one piece of motion: reveal the week a day at a time, to narrate over. */
+function play(){
+  const rows = [...document.querySelectorAll("#ledger .row")];
+  if (!rows.length) return;
+  const slow = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  rows.forEach(r => { r.classList.remove("reveal"); r.style.visibility = "hidden"; });
+  rows.forEach((r, i) => setTimeout(() => {
+    r.style.visibility = "visible";
+    if (!slow) r.classList.add("reveal");
+  }, slow ? 0 : i * 420));
+}
+
+(async function(){
+  ITEMS = addBaseline(await load());
+  if (!ITEMS.length){
+    document.getElementById("ledger").innerHTML =
+      '<p class="empty">No decisions to show. Either the API is not reachable, or this page was opened '
+      + 'directly from the file system, which browsers block from reading decisions.json. '
+      + 'From the repo root run <code>python3 -m engine.replay</code>, then <code>cd demo && python3 -m http.server 8080</code> '
+      + 'and open <code>http://localhost:8080</code>.</p>';
+    return;
+  }
+  ITEMS.sort((a,b) => a.event.timestamp.localeCompare(b.event.timestamp));
+  renderScore(scoreboard(ITEMS));
+
+  const sel = document.getElementById("filter");
+  const seen = new Map();
+  for (const i of ITEMS) seen.set(i.customer.customer_id, i.customer.name);
+  for (const [id, name] of seen){
+    const o = document.createElement("option"); o.value = id; o.textContent = name; sel.append(o);
+  }
+  sel.addEventListener("change", () => render(sel.value));
+  document.getElementById("play").addEventListener("click", play);
+  render("all");
+})();
+</script>
+</body>
+</html>
