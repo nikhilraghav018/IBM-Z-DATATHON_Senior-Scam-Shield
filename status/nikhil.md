@@ -11,6 +11,11 @@ Next: <what you're starting>
 Blocked on: <nothing, or what you need and from whom>
 -->
 
+## 3:25 PM: Done: LinuxONE serves the real scenarios
+Redeployed with Shums's 8 scenario files. `POST http://148.100.77.223:8000/demo/replay` returns 18 live decisions from the real engine: gold bar warn, pause, hold, escalate; grandparent reaches hold; phantom hacker pause, hold, escalate; all 5 innocents only allow/warn. Same result locally and on the server, identical on every replay. 40 tests pass, `data/validate.py` passes.
+Next: on call for redeploys if engine or data changes before judging
+Blocked on: nothing
+
 ## 2:10 PM: Done: API deployed on LinuxONE
 Running in Docker on the LinuxONE server as `scam-shield-api`, port 8000 open. http://148.100.77.223:8000/health gives `"arch": "s390x", "engine": "real"` from a laptop browser. Screenshots of `docker ps` + `/health` taken. Redeploy steps are in `api/README.md`.
 Next: redeploy once Shums's scenario files are on main, then check `/demo/replay` shows the real stories
