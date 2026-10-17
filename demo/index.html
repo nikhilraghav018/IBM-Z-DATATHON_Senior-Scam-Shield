@@ -1,410 +1,417 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Senior Scam Shield — Demo</title>
-    <style>
-      :root {
-        --bg: #0f172a;
-        --panel: #111827;
-        --panel-2: #1f2937;
-        --line: #334155;
-        --text: #e5e7eb;
-        --muted: #94a3b8;
-        --green: #16a34a;
-        --yellow: #fbbf24;
-        --orange: #f97316;
-        --red: #dc2626;
-        --purple: #7c3aed;
-        --blue: #60a5fa;
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Senior Scam Shield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Safety paper: the stock a passbook or a cheque is printed on. */
+  --paper:#F2F4F1;
+  --paper-sunk:#E8EBE6;
+  --ink:#16242B;
+  --ink-soft:#54625F;
+  --ink-faint:#8A9691;
+  --rule:#CDD5CF;
+  --stamp:#2E5E7E;
+
+  /* Severity ramps darker, not brighter. Weight reads as gravity. */
+  --allow:#6F7D74;
+  --warn:#9A6B1E;
+  --pause:#B0501F;
+  --hold:#96241C;
+  --escalate:#5A1512;
+
+  --sans:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --serif:"IBM Plex Serif",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.5;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:1420px;margin:0 auto;padding:0 24px}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--rule);padding:18px 0}
+.masthead .wrap{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.wordmark{font-family:var(--serif);font-weight:600;font-size:17px;letter-spacing:-.01em}
+.wordmark span{color:var(--ink-faint);font-weight:400}
+.conn{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+  display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ink-faint);flex:none}
+.conn.live .dot{background:#2F7D4F}
+.conn.file .dot{background:var(--warn)}
+
+/* ---------- hero ---------- */
+.hero{padding:44px 0 0}
+h1{
+  font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,54px);
+  line-height:1.06;letter-spacing:-.02em;margin:0 0 18px;max-width:17ch;
+}
+h1 em{font-style:italic}
+.standfirst{font-size:18px;line-height:1.6;color:var(--ink-soft);max-width:64ch;margin:0}
+
+/* ---------- scoreboard ---------- */
+.score{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink);margin-top:38px}
+.cell{padding:18px 20px 20px;border-right:1px solid var(--rule)}
+.cell:last-child{border-right:0}
+.cell dt{font-size:13px;color:var(--ink-soft);margin:0 0 10px}
+.cell dd{margin:0;font-family:var(--mono);font-size:clamp(24px,2.8vw,32px);line-height:1;font-weight:500}
+.versus{margin-top:9px;font-size:12.5px;color:var(--ink-faint);line-height:1.35}
+.versus b{font-weight:500;color:var(--ink-soft)}
+
+/* ---------- controls ---------- */
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  padding:20px 0 14px;border-top:1px solid var(--rule);margin-top:34px}
+button,select{font:inherit;font-size:14px;color:var(--ink);background:transparent;
+  border:1px solid var(--ink);border-radius:2px;padding:8px 15px;cursor:pointer}
+button:hover{background:var(--ink);color:var(--paper)}
+select:hover{background:var(--paper-sunk)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-left:4px}
+.chip{font-size:13px;padding:7px 12px;border:1px solid var(--rule);border-radius:2px;
+  background:transparent;color:var(--ink-soft);cursor:pointer}
+.chip:hover{background:var(--paper-sunk);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip[aria-pressed="true"]:hover{background:var(--ink)}
+.chip .n{font-family:var(--mono);font-size:11.5px;opacity:.75;margin-left:5px}
+button:focus-visible,select:focus-visible,.chip:focus-visible{outline:2px solid var(--stamp);outline-offset:2px}
+.hint{font-size:13px;color:var(--ink-faint);margin-left:auto}
+
+/* ---------- ledger table ---------- */
+table{width:100%;border-collapse:collapse;margin-top:2px}
+thead th{
+  text-align:left;font-size:12px;font-weight:400;color:var(--ink-soft);
+  border-bottom:2px solid var(--ink);padding:0 14px 7px 0;vertical-align:bottom;
+}
+thead th.us{color:var(--ink);font-weight:600}
+tbody td{border-bottom:1px solid var(--rule);padding:14px 14px 14px 0;vertical-align:top}
+tbody tr.newday td{border-top:1px solid var(--ink)}
+tbody tr:hover td{background:var(--paper-sunk)}
+
+.day{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);white-space:nowrap;width:62px}
+.day .d{display:block;font-size:19px;color:var(--ink);line-height:1.1}
+.who{width:270px}
+.who .name{font-weight:600;font-size:15px}
+.who .age{font-weight:400;color:var(--ink-faint)}
+.who .what{color:var(--ink-soft);font-size:14.5px;margin-top:3px}
+.who .amt{font-family:var(--mono);color:var(--ink)}
+.verdict{width:120px}
+.v{font-size:12px;font-weight:600;letter-spacing:.02em;display:inline-block;
+  padding:3px 9px;border-radius:2px;color:#fff;white-space:nowrap}
+.v-allow{background:none;color:var(--ink-faint);font-weight:400;padding-left:0}
+.v-warn{background:var(--warn)}
+.v-pause{background:var(--pause)}
+.v-hold{background:var(--hold)}
+.v-escalate{background:var(--escalate)}
+.scorechip{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-top:5px}
+.why{width:31%;font-size:14px;color:var(--ink)}
+.why ul{margin:0;padding:0;list-style:none}
+.why li{padding:2px 0 2px 15px;position:relative;line-height:1.45}
+.why li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:1px;background:var(--ink-faint)}
+.says{min-width:280px}
+.say{border-left:2px solid var(--rule);padding:3px 0 3px 11px;margin-bottom:8px;font-size:13.5px}
+.say:last-child{margin-bottom:0}
+.say .to{color:var(--ink-faint);font-size:12px}
+.say .txt{font-family:var(--serif);line-height:1.45;color:var(--ink)}
+.say.staff{border-left-color:var(--pause)}
+.say.fam{border-left-color:var(--stamp)}
+.say.fam .txt{color:var(--stamp)}
+.say.none .txt{color:var(--ink-faint);font-family:var(--sans);font-size:13px}
+.quiet{color:var(--ink-faint);font-size:13.5px;padding-top:2px}
+
+/* ---------- footer ---------- */
+.foot{border-top:2px solid var(--ink);margin-top:48px;padding:26px 0 64px;
+  display:flex;gap:28px;flex-wrap:wrap;font-size:13.5px;color:var(--ink-soft)}
+.foot p{margin:0;max-width:50ch}
+.foot .mono{font-family:var(--mono);font-size:12px;color:var(--ink-faint)}
+.empty{padding:40px 0;color:var(--ink-soft);font-size:15px}
+
+@media (max-width:1100px){
+  .why,.says{display:none}
+  .who{width:auto}
+}
+@media (max-width:720px){
+  .score{grid-template-columns:1fr 1fr}
+  .cell{border-bottom:1px solid var(--rule)}
+  .cell:nth-child(2){border-right:0}
+  .verdict.base{display:none}
+  thead th.base{display:none}
+  .hero{padding:34px 0 0}
+}
+@media (prefers-reduced-motion:no-preference){
+  tbody tr.reveal{animation:settle .34s ease-out both}
+  @keyframes settle{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="wordmark">Senior Scam Shield <span>/ fraud operations</span></div>
+    <div class="conn" id="conn"><span class="dot"></span><span id="connText">connecting</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Every step looked <em>normal</em> on its own.</h1>
+    <p class="standfirst">One week at one bank. Three older customers are being talked through a scam by
+      someone on the phone, and five are going about their lives. No card was stolen and no password was
+      broken, so every transaction below is the real customer doing what they asked to do.</p>
+    <dl class="score" id="score"></dl>
+  </section>
+
+  <div class="controls">
+    <button id="play" type="button">Play the week</button>
+    <select id="filter" aria-label="Show one customer"><option value="all">Everyone</option></select>
+    <div class="chips" id="chips" role="group" aria-label="Filter by what the bank did"></div>
+    <span class="hint" id="shown"></span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="day">Day</th>
+        <th class="who">Customer and transaction</th>
+        <th class="verdict us">Shield decision</th>
+        <th class="verdict base">Rule today</th>
+        <th class="why">Why</th>
+        <th class="says">What the bank said</th>
+      </tr>
+    </thead>
+    <tbody id="rows"><tr><td colspan="6" class="empty">Loading the week.</td></tr></tbody>
+  </table>
+
+  <footer class="foot">
+    <p><b>How a decision is made.</b> Warning signs from the last seven days are linked together.
+      One sign is a warning, two is a pause and a phone call, three or any attempt after the bank has
+      already stepped in is a hold with an alert to the customer's chosen contact.</p>
+    <p><b>The "rule today" column</b> is a simplified version of how banks check payments now: each
+      transaction judged on its own, with no memory of the days before it.</p>
+    <p class="mono" id="prov"></p>
+  </footer>
+</main>
+
+<script>
+const API = "http://148.100.77.223:8000/demo/replay";
+const ACTIONS = ["allow","warn","pause","hold","escalate"];
+const STOPPED = new Set(["pause","hold","escalate"]);
+const OUTFLOW = new Set(["cash_withdrawal","wire","payment"]);
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* The single-transaction rule, in case the data source didn't include it: flag one very
+   large outflow, or a large wire to a payee not seen before. Mirrors engine/baseline.py. */
+function addBaseline(items){
+  const seen = {};
+  for (const it of items){
+    const e = it.event, amt = Number(e.amount) || 0;
+    const known = seen[e.customer_id] || (seen[e.customer_id] = new Set());
+    if (!it.baseline){
+      let flagged = false;
+      if (OUTFLOW.has(e.type)){
+        if (amt >= 50000) flagged = true;
+        else if (e.type === "wire" && amt >= 25000 && e.payee_id && !known.has(e.payee_id)) flagged = true;
       }
+      it.baseline = {action: flagged ? "pause" : "allow", money_released: !flagged};
+    }
+    if (e.payee_id) known.add(e.payee_id);
+  }
+  return items;
+}
 
-      * { box-sizing: border-box; }
+async function load(){
+  const conn = document.getElementById("conn"), text = document.getElementById("connText");
+  try{
+    // Give up on the server quickly: a slow network must never leave the demo
+    // sitting on a blank page while someone is presenting it.
+    const res = await fetch(API, {method:"POST", signal: AbortSignal.timeout(2500)});
+    if (!res.ok) throw new Error(res.status);
+    const items = await res.json();
+    if (!items.length) throw new Error("empty");
+    conn.className = "conn live";
+    text.textContent = "live from LinuxONE · 148.100.77.223";
+    document.getElementById("prov").textContent = "Decisions scored live on IBM LinuxONE (s390x) at " + API;
+    return items;
+  }catch(err){
+    for (const file of ["decisions.json","sample_decisions.json"]){
+      try{
+        const res = await fetch(file);
+        if (!res.ok) continue;
+        const items = await res.json();
+        conn.className = "conn file";
+        text.textContent = "reading " + file;
+        document.getElementById("prov").textContent =
+          "Decisions produced by the engine on IBM LinuxONE (s390x), replayed from " + file;
+        return items;
+      }catch(e){ /* try the next source */ }
+    }
+    conn.className = "conn file";
+    text.textContent = "no data";
+    return [];
+  }
+}
 
-      body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: linear-gradient(180deg, #020817 0%, #0f172a 100%);
-        color: var(--text);
-      }
+function describe(e){
+  const amt = n => '<span class="amt">' + money(n) + '</span>';
+  switch (e.type){
+    case "internal_transfer": return "moved " + amt(e.amount) + " from " + esc(e.from_account||"savings") + " into checking";
+    case "cash_withdrawal":   return "withdrew " + amt(e.amount) + " in cash" + (e.branch_id ? " at " + esc(e.branch_id) : "");
+    case "wire":              return "wired " + amt(e.amount) + " to " + esc(e.payee_name||"a new payee");
+    case "payment":           return "paid " + amt(e.amount) + " to " + esc(e.payee_name||"a payee");
+    case "deposit":           return "deposited " + amt(e.amount);
+    case "login":             return e.remote_access ? "signed in while remote-control software was running" : "signed in";
+    default:                  return esc(e.type);
+  }
+}
 
-      .container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 24px;
-      }
+function scoreboard(items){
+  const scam = new Set(), all = new Set();
+  for (const i of items){
+    all.add(i.customer.customer_id);
+    if (i.event.truth === "scam") scam.add(i.customer.customer_id);
+  }
+  const innocent = [...all].filter(c => !scam.has(c));
+  const everStopped = (cid, key) => items.some(i => i.customer.customer_id === cid && STOPPED.has(i[key].action));
+  // Outflows only: a move between a customer's own accounts never left the bank.
+  const held = key => items.reduce((sum, i) =>
+    sum + (i.event.truth === "scam" && OUTFLOW.has(i.event.type) && !i[key].money_released
+      ? Number(i.event.amount) || 0 : 0), 0);
+  return {
+    stopped: [...scam].filter(c => everStopped(c, "decision")).length,
+    stoppedBase: [...scam].filter(c => everStopped(c, "baseline")).length,
+    scams: scam.size,
+    wrong: innocent.filter(c => everStopped(c, "decision")).length,
+    wrongBase: innocent.filter(c => everStopped(c, "baseline")).length,
+    innocent: innocent.length,
+    held: held("decision"), heldBase: held("baseline"),
+  };
+}
 
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
-        padding: 16px 0 24px;
-        border-bottom: 1px solid var(--line);
-      }
+function renderScore(s){
+  const cell = (label, value, versus) =>
+    `<div class="cell"><dt>${label}</dt><dd>${value}</dd><div class="versus">${versus}</div></div>`;
+  document.getElementById("score").innerHTML =
+    cell("Scams interrupted", `${s.stopped} of ${s.scams}`, `Rule today: <b>${s.stoppedBase} of ${s.scams}</b>`) +
+    cell("Ordinary customers stopped", `${s.wrong} of ${s.innocent}`, `Rule today: <b>${s.wrongBase} of ${s.innocent}</b>`) +
+    cell("Kept inside the bank", money(s.held), `Rule today: <b>${money(s.heldBase)}</b>`) +
+    cell("Scored on", "s390x", "IBM LinuxONE, on-site with the bank's data");
+}
 
-      h1 {
-        margin: 0;
-        font-size: clamp(1.8rem, 3vw, 2.8rem);
-      }
+function sayBlock(to, text, cls){
+  if (!text) return `<div class="say none ${cls}"><div class="to">${to}</div><div class="txt">nothing sent</div></div>`;
+  return `<div class="say ${cls}"><div class="to">${to}</div><div class="txt">${esc(text)}</div></div>`;
+}
 
-      .tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(96, 165, 250, 0.10);
-        border: 1px solid rgba(96, 165, 250, 0.35);
-        color: #dbeafe;
-        border-radius: 999px;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-      }
+function rowHTML(item, newday){
+  const {customer:c, event:e, decision:d, baseline:b} = item;
+  const when = new Date(e.timestamp);
+  const v = a => `<span class="v v-${a}">${a === "allow" ? "allowed" : a}</span>`;
+  const m = d.messages || {};
+  const cls = newday ? "newday" : "";
+  return `<tr class="${cls}">
+    <td class="day">${when.toLocaleDateString("en-US",{weekday:"short"})}<span class="d">${when.getDate()}</span></td>
+    <td class="who">
+      <div class="name">${esc(c.name)} <span class="age">${c.age}</span></div>
+      <div class="what">${describe(e)}</div>
+    </td>
+    <td class="verdict">${v(d.action)}${d.action !== "allow" ? `<span class="scorechip">risk ${d.risk_score}</span>` : ""}</td>
+    <td class="verdict base">${v(b.action)}</td>
+    <td class="why">${d.reasons && d.reasons.length
+      ? `<ul>${d.reasons.map(r => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}</td>
+    <td class="says">${(m.customer || m.staff || m.family)
+      ? sayBlock("To the customer", m.customer, "cust")
+        + sayBlock("To the teller", m.staff, "staff")
+        + sayBlock("To their contact", m.family, "fam")
+      : '<div class="quiet">Nothing said. The payment went through.</div>'}</td>
+  </tr>`;
+}
 
-      .summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 16px;
-        margin: 24px 0;
-      }
+let ITEMS = [], OFF = new Set();
 
-      .card {
-        background: rgba(17, 24, 39, 0.9);
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        padding: 16px;
-      }
+function visible(){
+  const who = document.getElementById("filter").value;
+  return ITEMS.filter(i =>
+    (who === "all" || i.customer.customer_id === who) && !OFF.has(i.decision.action));
+}
 
-      .card h3 {
-        margin: 0 0 12px;
-        color: var(--muted);
-        font-size: 0.9rem;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
+function render(){
+  const shown = visible();
+  const body = document.getElementById("rows");
+  document.getElementById("shown").textContent = `${shown.length} of ${ITEMS.length} transactions`;
+  if (!shown.length){
+    body.innerHTML = '<tr><td colspan="6" class="empty">Nothing matches these filters.</td></tr>';
+    return;
+  }
+  let last = null;
+  body.innerHTML = shown.map(i => {
+    const day = i.event.timestamp.slice(0,10);
+    const newday = day !== last; last = day;
+    return rowHTML(i, newday);
+  }).join("");
+}
 
-      .big-number {
-        font-size: 2rem;
-        font-weight: 700;
-      }
+function buildChips(){
+  const box = document.getElementById("chips");
+  const counts = {};
+  for (const i of ITEMS) counts[i.decision.action] = (counts[i.decision.action] || 0) + 1;
+  box.innerHTML = ACTIONS.filter(a => counts[a]).map(a =>
+    `<button class="chip" type="button" data-action="${a}" aria-pressed="true">${a === "allow" ? "allowed" : a}<span class="n">${counts[a]}</span></button>`
+  ).join("");
+  for (const chip of box.querySelectorAll(".chip")){
+    chip.addEventListener("click", () => {
+      const a = chip.dataset.action, on = chip.getAttribute("aria-pressed") === "true";
+      chip.setAttribute("aria-pressed", on ? "false" : "true");
+      on ? OFF.add(a) : OFF.delete(a);
+      render();
+    });
+  }
+}
 
-      .toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 12px;
-        margin: 16px 0 24px;
-      }
+/* The one piece of motion: reveal the week a day at a time, to narrate over. */
+function play(){
+  const rows = [...document.querySelectorAll("#rows tr")];
+  if (!rows.length) return;
+  const slow = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  rows.forEach(r => { r.classList.remove("reveal"); r.style.visibility = "hidden"; });
+  rows.forEach((r, i) => setTimeout(() => {
+    r.style.visibility = "visible";
+    if (!slow) r.classList.add("reveal");
+  }, slow ? 0 : i * 420));
+}
 
-      .toolbar label {
-        color: var(--muted);
-        font-weight: 600;
-      }
+(async function(){
+  ITEMS = addBaseline(await load());
+  if (!ITEMS.length){
+    document.getElementById("rows").innerHTML =
+      '<tr><td colspan="6" class="empty">No decisions to show. Either the API is not reachable, or this page '
+      + 'was opened straight from the file system, which browsers block from reading decisions.json. '
+      + 'From the repo root run <code>python3 -m engine.replay</code>, then '
+      + '<code>cd demo &amp;&amp; python3 -m http.server 8080</code> and open <code>http://localhost:8080</code>.</td></tr>';
+    return;
+  }
+  ITEMS.sort((a,b) => a.event.timestamp.localeCompare(b.event.timestamp));
+  renderScore(scoreboard(ITEMS));
 
-      select {
-        appearance: none;
-        background: var(--panel-2);
-        color: var(--text);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 10px 14px;
-        font-size: 1rem;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        overflow: hidden;
-      }
-
-      th, td {
-        padding: 14px 12px;
-        border-bottom: 1px solid var(--line);
-        text-align: left;
-        vertical-align: top;
-      }
-
-      th {
-        background: rgba(30, 41, 59, 0.9);
-        color: var(--muted);
-        font-size: 0.78rem;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      tbody tr:hover {
-        background: rgba(148, 163, 184, 0.04);
-      }
-
-      .badge {
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-
-      .allow { background: rgba(22, 163, 74, 0.18); color: #bbf7d0; border: 1px solid rgba(22, 163, 74, 0.4); }
-      .warn { background: rgba(251, 191, 36, 0.18); color: #fde68a; border: 1px solid rgba(251, 191, 36, 0.4); }
-      .pause { background: rgba(249, 115, 22, 0.18); color: #fed7aa; border: 1px solid rgba(249, 115, 22, 0.4); }
-      .hold { background: rgba(220, 38, 38, 0.18); color: #fecaca; border: 1px solid rgba(220, 38, 38, 0.4); }
-      .escalate { background: rgba(124, 58, 237, 0.18); color: #ddd6fe; border: 1px solid rgba(124, 58, 237, 0.4); }
-
-      .messages {
-        display: grid;
-        gap: 8px;
-        margin-top: 8px;
-      }
-
-      .msg {
-        background: rgba(148, 163, 184, 0.06);
-        border-left: 3px solid var(--blue);
-        padding: 8px 10px;
-        border-radius: 8px;
-        color: var(--text);
-        line-height: 1.4;
-      }
-
-      .muted {
-        color: var(--muted);
-      }
-
-      .reason-list {
-        margin: 0;
-        padding-left: 18px;
-      }
-
-      .reason-list li {
-        margin: 6px 0;
-      }
-
-      .status-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: var(--muted);
-      }
-
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--green);
-        box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
-      }
-
-      @media (max-width: 900px) {
-        table, thead, tbody, th, td, tr { display: block; }
-        thead { display: none; }
-        tr { border-bottom: 1px solid var(--line); }
-        td {
-          border-bottom: none;
-          padding: 10px 12px;
-        }
-        td::before {
-          content: attr(data-label);
-          display: block;
-          font-size: 0.72rem;
-          color: var(--muted);
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          margin-bottom: 6px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <div>
-          <div class="tag">Senior Scam Shield • Demo</div>
-          <h1>Bank decision replay</h1>
-        </div>
-        <div class="status-row">
-          <span class="dot"></span>
-          <span>Live data shown from sample replay</span>
-        </div>
-      </header>
-
-      <section class="summary" id="summary"></section>
-
-      <div class="toolbar">
-        <label for="customerFilter">Customer</label>
-        <select id="customerFilter">
-          <option value="all">All customers</option>
-        </select>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Customer</th>
-            <th>What happened</th>
-            <th>Action</th>
-            <th>Why</th>
-            <th>Messages</th>
-          </tr>
-        </thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
-
-    <script>
-      const sampleDecisions = [
-        {
-          "customer": { "customer_id": "C1", "name": "Margaret Hill", "age": 78, "opted_in": true },
-          "event": { "event_id": "C1-E101", "customer_id": "C1", "timestamp": "2026-10-19T10:05:00", "type": "internal_transfer", "channel": "online", "amount": 150000, "from_account": "investment", "to_account": "checking", "payee_id": null, "payee_name": null, "payee_category": null, "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "scam" },
-          "decision": { "event_id": "C1-E101", "customer_id": "C1", "timestamp": "2026-10-19T10:05:00", "action": "warn", "triggers_fired": ["T1"], "chain": ["T1"], "intervention_active": false, "risk_score": 20, "reasons": ["Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)"], "messages": { "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.", "staff": null, "family": null }, "money_released": true }
-        },
-        {
-          "customer": { "customer_id": "C4", "name": "David Chen", "age": 67, "opted_in": true },
-          "event": { "event_id": "C4-E101", "customer_id": "C4", "timestamp": "2026-10-19T13:30:00", "type": "internal_transfer", "channel": "online", "amount": 120000, "from_account": "savings", "to_account": "checking", "payee_id": null, "payee_name": null, "payee_category": null, "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "normal" },
-          "decision": { "event_id": "C4-E101", "customer_id": "C4", "timestamp": "2026-10-19T13:30:00", "action": "warn", "triggers_fired": ["T1"], "chain": ["T1"], "intervention_active": false, "risk_score": 20, "reasons": ["Oct 19: $120,000 moved from savings to checking (about 100x this customer's usual transfer)"], "messages": { "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.", "staff": null, "family": null }, "money_released": true }
-        },
-        {
-          "customer": { "customer_id": "C1", "name": "Margaret Hill", "age": 78, "opted_in": true },
-          "event": { "event_id": "C1-E102", "customer_id": "C1", "timestamp": "2026-10-20T11:20:00", "type": "wire", "channel": "online", "amount": 80000, "from_account": "checking", "to_account": null, "payee_id": "P-LSB", "payee_name": "Lone Star Bullion", "payee_category": "gold_dealer", "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "scam" },
-          "decision": { "event_id": "C1-E102", "customer_id": "C1", "timestamp": "2026-10-20T11:20:00", "action": "pause", "triggers_fired": ["T2"], "chain": ["T1", "T2"], "intervention_active": false, "risk_score": 50, "reasons": ["Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)", "Oct 20: first payment to a gold dealer (Lone Star Bullion, $80,000)"], "messages": { "customer": "We've paused this payment to protect you. A member of our team will call you at the phone number we have on file.", "staff": "PAUSE: call the customer on the number on file, not one they give you. Ask: Has anyone asked you to keep this payment secret, or told you what to say to the bank?", "family": null }, "money_released": false }
-        },
-        {
-          "customer": { "customer_id": "C5", "name": "Robert Alvarez", "age": 74, "opted_in": true },
-          "event": { "event_id": "C5-E101", "customer_id": "C5", "timestamp": "2026-10-20T15:00:00", "type": "payment", "channel": "online", "amount": 3000, "from_account": "checking", "to_account": null, "payee_id": "P-HCO", "payee_name": "Heritage Coins", "payee_category": "gold_dealer", "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "normal" },
-          "decision": { "event_id": "C5-E101", "customer_id": "C5", "timestamp": "2026-10-20T15:00:00", "action": "allow", "triggers_fired": [], "chain": [], "intervention_active": false, "risk_score": 0, "reasons": ["Trusted payee, paid 3 times before"], "messages": { "customer": null, "staff": null, "family": null }, "money_released": true }
-        },
-        {
-          "customer": { "customer_id": "C4", "name": "David Chen", "age": 67, "opted_in": true },
-          "event": { "event_id": "C4-E102", "customer_id": "C4", "timestamp": "2026-10-21T09:45:00", "type": "wire", "channel": "online", "amount": 118500, "from_account": "checking", "to_account": null, "payee_id": "P-CCT", "payee_name": "Collin County Title", "payee_category": "title_escrow", "payee_verified": true, "branch_id": null, "remote_access": false, "truth": "normal" },
-          "decision": { "event_id": "C4-E102", "customer_id": "C4", "timestamp": "2026-10-21T09:45:00", "action": "allow", "triggers_fired": [], "chain": ["T1"], "intervention_active": false, "risk_score": 20, "reasons": ["Verified payee (Collin County Title)"], "messages": { "customer": null, "staff": null, "family": null }, "money_released": true }
-        },
-        {
-          "customer": { "customer_id": "C6", "name": "Linda Park", "age": 69, "opted_in": false },
-          "event": { "event_id": "C6-E101", "customer_id": "C6", "timestamp": "2026-10-21T12:10:00", "type": "cash_withdrawal", "channel": "branch", "amount": 20000, "from_account": "checking", "to_account": null, "payee_id": null, "payee_name": null, "payee_category": null, "payee_verified": false, "branch_id": "BR-PLANO-1", "remote_access": false, "truth": "normal" },
-          "decision": { "event_id": "C6-E101", "customer_id": "C6", "timestamp": "2026-10-21T12:10:00", "action": "warn", "triggers_fired": ["T1"], "chain": ["T1"], "intervention_active": false, "risk_score": 20, "reasons": ["Oct 21: $20,000 cash withdrawal (about 67x their usual)"], "messages": { "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.", "staff": null, "family": null }, "money_released": true }
-        },
-        {
-          "customer": { "customer_id": "C1", "name": "Margaret Hill", "age": 78, "opted_in": true },
-          "event": { "event_id": "C1-E103", "customer_id": "C1", "timestamp": "2026-10-22T14:00:00", "type": "wire", "channel": "online", "amount": 60000, "from_account": "checking", "to_account": null, "payee_id": "P-LSB", "payee_name": "Lone Star Bullion", "payee_category": "gold_dealer", "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "scam" },
-          "decision": { "event_id": "C1-E103", "customer_id": "C1", "timestamp": "2026-10-22T14:00:00", "action": "hold", "triggers_fired": ["T2", "T3", "T5"], "chain": ["T1", "T2", "T3"], "intervention_active": true, "risk_score": 95, "reasons": ["Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)", "Oct 20: first payment to a gold dealer (Lone Star Bullion, $80,000)", "Oct 22: another large outflow within 2 days ($140,000 in the last 7 days)", "Oct 22: new attempt to move money after the bank already stepped in"], "messages": { "customer": "This payment is on a short hold while we make sure you are safe. We will call you today.", "staff": "HOLD: senior scam pattern. Call the customer, then the trusted contact. Do not release funds until verified.", "family": "Hi Susan, Margaret asked us to let you know if something looked unusual. Please check in with them today." }, "money_released": false }
-        },
-        {
-          "customer": { "customer_id": "C1", "name": "Margaret Hill", "age": 78, "opted_in": true },
-          "event": { "event_id": "C1-E104", "customer_id": "C1", "timestamp": "2026-10-23T10:30:00", "type": "cash_withdrawal", "channel": "branch", "amount": 40000, "from_account": "checking", "to_account": null, "payee_id": null, "payee_name": null, "payee_category": null, "payee_verified": false, "branch_id": "BR-FRISCO-3", "remote_access": false, "truth": "scam" },
-          "decision": { "event_id": "C1-E104", "customer_id": "C1", "timestamp": "2026-10-23T10:30:00", "action": "escalate", "triggers_fired": ["T1", "T3", "T5"], "chain": ["T1", "T2", "T3"], "intervention_active": true, "risk_score": 95, "reasons": ["Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)", "Oct 20: first payment to a gold dealer (Lone Star Bullion, $80,000)", "Oct 23: another large outflow within 1 day ($180,000 in the last 7 days)", "Oct 23: new attempt to move money after the bank already stepped in (cash at a different branch)"], "messages": { "customer": "This payment is still on hold. A branch manager will contact you personally.", "staff": "ESCALATE: repeated attempts after a hold. Manager review required. Consider an Adult Protective Services referral.", "family": "Hi Susan, Margaret asked us to let you know if something looked unusual. Please check in with them today." }, "money_released": false }
-        }
-      ];
-
-      const summaryEl = document.getElementById('summary');
-      const rowsEl = document.getElementById('rows');
-      const filterEl = document.getElementById('customerFilter');
-
-      const customers = [...new Set(sampleDecisions.map(d => d.customer.customer_id))].sort();
-      customers.forEach(id => {
-        const option = document.createElement('option');
-        option.value = id;
-        option.textContent = id;
-        filterEl.appendChild(option);
-      });
-
-      function formatMoney(value) {
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
-      }
-
-      function formatEventText(event) {
-        const typeLabel = event.type.replace(/_/g, ' ');
-        if (event.type === 'cash_withdrawal') {
-          return `${typeLabel} of ${formatMoney(event.amount)} at ${event.branch_id}`;
-        }
-        if (event.type === 'wire' || event.type === 'payment') {
-          return `${typeLabel} to ${event.payee_name || 'a payee'} (${formatMoney(event.amount)})`;
-        }
-        if (event.type === 'internal_transfer') {
-          return `${typeLabel} ${formatMoney(event.amount)} from ${event.from_account} to ${event.to_account}`;
-        }
-        return `${typeLabel} ${formatMoney(event.amount)}`;
-      }
-
-      function renderSummary(data) {
-        const allowed = data.filter(d => d.decision.action === 'allow').length;
-        const warned = data.filter(d => d.decision.action === 'warn').length;
-        const paused = data.filter(d => d.decision.action === 'pause').length;
-        const held = data.filter(d => d.decision.action === 'hold').length;
-        const escalated = data.filter(d => d.decision.action === 'escalate').length;
-
-        const cards = [
-          { label: 'Events', value: data.length },
-          { label: 'Allowed', value: allowed },
-          { label: 'Warned', value: warned },
-          { label: 'Paused', value: paused },
-          { label: 'Held', value: held },
-          { label: 'Escalated', value: escalated }
-        ];
-
-        summaryEl.innerHTML = cards.map(card => `
-          <div class="card">
-            <h3>${card.label}</h3>
-            <div class="big-number">${card.value}</div>
-          </div>
-        `).join('');
-      }
-
-      function renderRows(data) {
-        rowsEl.innerHTML = data.map(item => {
-          const action = item.decision.action;
-          const event = item.event;
-          const messageMap = item.decision.messages || {};
-          const customerMessage = messageMap.customer || '—';
-          const staffMessage = messageMap.staff || '—';
-          const familyMessage = messageMap.family || '—';
-
-          const reasons = (item.decision.reasons || []).map(r => `<li>${r}</li>`).join('');
-
-          return `
-            <tr>
-              <td data-label="Day">${new Date(event.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
-              <td data-label="Customer">
-                <strong>${item.customer.name}</strong><br />
-                <span class="muted">${item.customer.customer_id} · age ${item.customer.age}</span>
-              </td>
-              <td data-label="What happened">
-                <div><strong>${event.type.replace(/_/g, ' ')}</strong></div>
-                <div class="muted">${formatEventText(event)}</div>
-              </td>
-              <td data-label="Action">
-                <span class="badge ${action}">${action}</span>
-              </td>
-              <td data-label="Why">
-                <ul class="reason-list">${reasons}</ul>
-              </td>
-              <td data-label="Messages">
-                <div class="messages">
-                  <div class="msg"><strong>Customer:</strong> ${customerMessage}</div>
-                  <div class="msg"><strong>Staff:</strong> ${staffMessage}</div>
-                  <div class="msg"><strong>Family:</strong> ${familyMessage}</div>
-                </div>
-              </td>
-            </tr>
-          `;
-        }).join('');
-      }
-
-      function applyFilter() {
-        const selected = filterEl.value;
-        const filtered = selected === 'all'
-          ? sampleDecisions
-          : sampleDecisions.filter(d => d.customer.customer_id === selected);
-
-        renderSummary(filtered);
-        renderRows(filtered);
-      }
-
-      filterEl.addEventListener('change', applyFilter);
-      applyFilter();
-    </script>
-  </body>
+  const sel = document.getElementById("filter");
+  const people = new Map();
+  for (const i of ITEMS) people.set(i.customer.customer_id, i.customer.name);
+  for (const [id, name] of people){
+    const o = document.createElement("option"); o.value = id; o.textContent = name; sel.append(o);
+  }
+  sel.addEventListener("change", render);
+  document.getElementById("play").addEventListener("click", play);
+  buildChips();
+  render();
+})();
+</script>
+</body>
 </html>

@@ -56,53 +56,50 @@ You can plan all of this now using `sample_decisions.json`. The real page will s
 
 ---
 
-## Part 2: Demo page (built, `demo/index.html`)
+## Part 2: Demo page (`demo/index.html`)
 
-The page is written. It is one self-contained file: plain HTML, CSS and JavaScript, no frameworks,
-no build step. Open it and it shows the week as a bank ledger, with two verdict columns side by side:
-what Senior Scam Shield decided, and what a single-transaction rule would have done.
+Built by Shums, then extended with live data and the comparison column. One self-contained file:
+plain HTML, CSS and JavaScript, no frameworks, no build step.
+
+Shows the week as a bank ledger. Each row carries the transaction, what Senior Scam Shield decided,
+what a single-transaction rule would have done, why, and the three messages the bank sent.
 
 ### Open it
-The page needs to be served over http, because browsers block a file opened directly from disk
-from reading `decisions.json`.
+Serve it over http. A page opened straight from the file system is blocked by the browser from
+reading `decisions.json`.
 
 ```bash
-# from the repo root, with the latest scenario files
-python3 -m engine.replay          # writes demo/decisions.json
+python3 -m engine.replay          # from the repo root: writes demo/decisions.json
 cd demo && python3 -m http.server 8080
-# then open http://localhost:8080
+# open http://localhost:8080
 ```
 
 ### Where its data comes from
-It tries three sources in order and shows which one it used in the top right:
+Three sources, in order, shown in the top right:
 1. `POST http://148.100.77.223:8000/demo/replay`, the live API on LinuxONE. Gives up after 2.5 seconds.
 2. `decisions.json` next to the page, written by `python3 -m engine.replay`.
 3. `sample_decisions.json`, the hand-written examples.
 
-So the demo cannot end up blank during a recording. If the server is unreachable it quietly falls
-back to the file and says so.
+So it cannot go blank during a recording. If the server is unreachable it falls back and says so.
 
-**`decisions.json` currently holds placeholder output** built from `docs/SCENARIOS.md` so the page
-is never empty. Once the real `data/scenarios/*.json` are on main, run `python3 -m engine.replay`
-again and it is overwritten with the real thing.
+### Controls
+- **Play the week**: rows appear a day at a time, to narrate over.
+- **Customer dropdown**: one person's week on its own.
+- **Action chips** (allowed / warn / pause / hold / escalate): click to hide or show that action.
+  Turning off "allowed" leaves only the transactions the bank acted on.
 
 ### What to show on camera
-- **Press "Play the week"**: rows appear a day at a time, which gives you something to narrate over.
-- **Pick "Betty Ruiz" from the dropdown**: three cash withdrawals, every one of them allowed by the
-  rule in use today, and the chain catches her on the second. This is the clearest moment in the demo.
-- **Select any row with a verdict**: it opens to show the reasons, the message to the customer, the
-  script for the teller, and the note to her trusted contact.
-- The right-hand column staying flat while the left climbs is the argument. Let it sit on screen.
-
-### If you want to change it
-It is one file, about 400 lines, with the CSS at the top and the JavaScript at the bottom.
-Colours are variables in `:root`. Ask Rinin or Nikhil before changing the data shape, since it
-follows `docs/CONTRACT.md`.
+- **Pick "Betty Ruiz"**: three cash withdrawals, every one allowed by the rule in use today, caught by
+  the chain on the second. The clearest moment in the demo.
+- **The two verdict columns.** The right one stays flat while the left climbs. That contrast is the
+  whole argument; let it sit on screen.
+- **Margaret's Friday row**: escalate, with the note to her daughter visible. Ethics and AI for Good
+  in one frame.
+- Check the top right says "live from LinuxONE" before recording.
 
 ### Checklist
-- [x] Page shows every row with colored verdicts
-- [x] Reasons and the customer / teller / family messages on a row
+- [x] Every row with both verdicts, reasons, and the three messages
+- [x] Customer filter and action filters
 - [x] Falls back to a file if the API is unreachable
 - [x] Works at phone width
-- [ ] Pointed at the live API on the night (open it and check the top right says "live from LinuxONE")
-- [ ] Re-run `python3 -m engine.replay` once Shums's scenarios are on main
+- [ ] Re-run `python3 -m engine.replay` after any scenario change, so `decisions.json` matches
