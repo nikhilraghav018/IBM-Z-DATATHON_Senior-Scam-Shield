@@ -1,6 +1,6 @@
 # data/ : Scenario data + evidence
 
-**Owner:** data and evidence lead (6/10)
+**Owner:** Shums
 **Goal:** write the 3 scam stories and 5 innocent stories as JSON files the engine can replay, then collect the screenshots and README content the judges need.
 
 Read first:
@@ -42,4 +42,4 @@ Typing 90 days of grocery trips by hand is slow and error-prone. Write a small s
 - [ ] Fill in the "Results" section of the root README with the replay numbers
 
 ## Prompt to start a Claude session
-> I'm the data lead for Senior Scam Shield (IBM Z Datathon). Read `CLAUDE.md`, `docs/CONTRACT.md`, `docs/SCENARIOS.md` and `data/scenarios/_format_example.json`. Help me write `data/make_history.py` and then `data/scenarios/gold_bar.json`, step by step.
+> I'm working on the scenario data for Senior Scam Shield (IBM Z Datathon). Read `CLAUDE.md`, `docs/CONTRACT.md`, `docs/SCENARIOS.md` and `data/scenarios/_format_example.json`. Help me write `data/make_history.py` and then `data/scenarios/gold_bar.json`, step by step.

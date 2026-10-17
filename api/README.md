@@ -1,6 +1,6 @@
 # api/ : FastAPI service + LinuxONE deployment
 
-**Owner:** API / platform lead (7/10)
+**Owner:** Nikhil
 **Goal:** wrap the engine in a small web API, run it in Docker on the team's LinuxONE server, and help connect the demo page to it.
 
 ## Endpoints to build
@@ -48,4 +48,4 @@ Until the engine is ready, return a hard-coded Decision from `demo/sample_decisi
 - Jupyter already runs in a container on port 38888 (don't stop it)
 
 ## Prompt to start a Claude session
-> I'm the API and platform lead for Senior Scam Shield (IBM Z Datathon). Read `CLAUDE.md`, `docs/CONTRACT.md` and `api/README.md`. Help me write `api/main.py` with FastAPI and a Dockerfile that runs on an IBM LinuxONE s390x Ubuntu server. Start with `/health` and a hard-coded `/demo/replay`.
+> I'm working on the API and LinuxONE deployment for Senior Scam Shield (IBM Z Datathon). Read `CLAUDE.md`, `docs/CONTRACT.md` and `api/README.md`. Help me write `api/main.py` with FastAPI and a Dockerfile that runs on an IBM LinuxONE s390x Ubuntu server. Start with `/health` and a hard-coded `/demo/replay`.

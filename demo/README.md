@@ -1,6 +1,6 @@
 # demo/ : Demo screen
 
-**Owner:** demo lead (5/10)
+**Owner:** Kamali
 **Goal:** one web page that shows the week of events and what the bank decided for each one, with colored badges. This is what the judges watch.
 
 ## Keep it simple (on purpose)
@@ -27,7 +27,7 @@ Note: some browsers block loading a local JSON file from a double-clicked HTML f
 1. Run `python -m http.server 8080` inside the `demo/` folder and open `http://localhost:8080`, or
 2. Paste the JSON straight into the HTML as `const decisions = [...]` for now.
 
-### Stage 2 (after ~7 PM, pair with the API lead): use the real backend
+### Stage 2 (after ~7 PM, pair with Nikhil): use the real backend
 Swap the file for a call to the API:
 ```javascript
 const res = await fetch("http://148.100.77.223:8000/demo/replay", { method: "POST" });
@@ -42,8 +42,8 @@ The data shape is exactly the same as `sample_decisions.json`, so nothing else o
 - [ ] Colored badges match the action
 - [ ] Reasons are visible for each row
 - [ ] Messages (customer / staff / family) visible somehow
-- [ ] Works with the real API (with the API lead)
+- [ ] Works with the real API (with Nikhil)
 - [ ] Screen recording of the demo for the pitch video
 
 ## Prompt to start a Claude session
-> I'm building the demo page for Senior Scam Shield (IBM Z Datathon). I'm a beginner. Read `CLAUDE.md`, `docs/CONTRACT.md` and `demo/README.md`, then look at `demo/sample_decisions.json`. Help me build `demo/index.html` as a single file with plain HTML, CSS and JavaScript that shows the decisions as a table with colored action badges. Explain each part simply.
+> I'm building the demo page for Senior Scam Shield (IBM Z Datathon). Read `CLAUDE.md`, `docs/CONTRACT.md` and `demo/README.md`, then look at `demo/sample_decisions.json`. Help me build `demo/index.html` as a single file with plain HTML, CSS and JavaScript that shows the decisions as a table with colored action badges. Explain each part simply.

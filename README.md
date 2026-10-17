@@ -31,9 +31,9 @@ Plus five innocent look-alikes (home buyer, coin collector, car buyer, crypto in
 |---|---|---|
 | `docs/` | Shared contract, decision spec, scenarios. **Read before coding** | everyone |
 | `engine/` | The decision engine (plain Python, no dependencies) | Rinin |
-| `api/` | FastAPI service + Docker, deployed on LinuxONE | API / platform lead |
-| `data/` | Scenario JSON files + evidence screenshots | Data lead |
-| `demo/` | Single-page demo (HTML + JS) | Demo lead |
+| `api/` | FastAPI service + Docker, deployed on LinuxONE | Nikhil |
+| `data/` | Scenario JSON files + evidence screenshots | Shums |
+| `demo/` | Single-page demo (HTML + JS) | Kamali |
 
 Each folder has its own `README.md` with a checklist and a ready-made prompt for starting a Claude session.
 

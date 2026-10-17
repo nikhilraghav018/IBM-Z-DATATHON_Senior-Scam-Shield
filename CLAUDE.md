@@ -19,14 +19,14 @@ A decision engine inside a bank that watches each customer's sequence of money m
 - Never put SSH keys, tokens or passwords in the repo.
 
 ## Team and folders
-| Folder | Owner | Skill level | Notes |
-|---|---|---|---|
-| `engine/` | Rinin | strong | Decision logic |
-| `api/` | API / platform lead | 7/10 | FastAPI + Docker on LinuxONE, CORS, integration |
-| `data/` | Data lead | 6/10 | Scenario JSON + evidence screenshots |
-| `demo/` | Demo lead | 5/10 | Single `index.html`, plain HTML/CSS/JS, no frameworks |
+| Folder | Owner | Notes |
+|---|---|---|
+| `engine/` | Rinin | Decision logic |
+| `api/` | Nikhil | FastAPI + Docker on LinuxONE, CORS, integration |
+| `data/` | Shums | Scenario JSON + evidence screenshots |
+| `demo/` | Kamali | Single `index.html`, plain HTML/CSS/JS, no frameworks |
 
-Each person should only change files in their own folder. Explain things step by step and keep solutions simple: it's a 24-hour build and several teammates are beginners.
+Each person should only change files in their own folder. Explain things step by step and keep solutions simple: it's a 24-hour build, so the simplest working solution wins.
 
 ## Time pressure
 Prefer the simplest thing that works and can be demoed. Neural networks and IBM Granite are listed as future enhancements, not part of today's build, unless the team says otherwise.
