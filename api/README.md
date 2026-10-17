@@ -35,12 +35,40 @@ Until the engine is ready, return a hard-coded Decision from `demo/sample_decisi
 5. **Docker needs sudo** on our server unless someone ran `sudo usermod -aG docker linux1` and logged back in.
 
 ## Checklist
-- [ ] `requirements.txt` (fastapi, uvicorn)
-- [ ] `api/main.py` with `/health` running on LinuxONE (screenshot it)
-- [ ] `Dockerfile` at repo root, builds and runs on LinuxONE
+- [x] `api/requirements.txt` (fastapi, uvicorn)
+- [x] `api/main.py`: every endpoint above, CORS on, stub mode until the engine lands (tested locally)
+- [ ] `/health` running on LinuxONE (screenshot it)
+- [x] `Dockerfile` at repo root (written; not yet built on LinuxONE)
+- [ ] Docker image builds and runs on LinuxONE
 - [ ] CORS on, port 8000 open, demo page can reach `/health`
 - [ ] `/events` and `/demo/replay` calling the real engine
 - [ ] Screenshot: `docker ps` + `/health` showing `s390x` (judging evidence)
+
+## Stub mode vs real engine
+`api/main.py` tries `from engine.engine import Engine` at startup.
+- **Engine missing:** "stub" mode. `/demo/replay` returns `demo/sample_decisions.json`, `/events` returns the sample decision with the same `event_id` (or a plain `allow`).
+- **Engine present:** `/demo/replay` resets memory, registers every `data/scenarios/*.json` (files starting with `_` are skipped) and replays all `live` events in time order.
+
+`/health` and the `X-Engine` response header say which mode is on. The API strips `truth` from every event before the engine sees it, but the replay items keep it for the demo page.
+
+## Run locally
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r api/requirements-dev.txt
+python -m pytest api -q
+uvicorn api.main:app --reload --port 8000      # http://127.0.0.1:8000/docs
+```
+
+## Deploy on LinuxONE
+```bash
+ssh -i <key> linux1@148.100.77.223
+git clone https://github.com/nikhilraghav018/IBM-Z-DATATHON_Senior-Scam-Shield.git && cd IBM-Z-DATATHON_Senior-Scam-Shield
+sudo docker build -t scam-shield-api .
+sudo docker run -d --name scam-shield-api --restart unless-stopped -p 8000:8000 scam-shield-api
+sudo iptables -I INPUT -p tcp --dport 8000 -j ACCEPT
+curl localhost:8000/health                     # expect "arch": "s390x"
+```
+To pick up new engine or scenario commits: `git pull && sudo docker rm -f scam-shield-api`, then the build and run lines again.
 
 ## Server facts
 - Login: `ssh -i <key> linux1@148.100.77.223` (key is shared privately, **never commit it**)
