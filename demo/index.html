@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Senior Scam Shield — Demo</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --panel: #111827;
+        --panel-2: #1f2937;
+        --line: #334155;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --green: #16a34a;
+        --yellow: #fbbf24;
+        --orange: #f97316;
+        --red: #dc2626;
+        --purple: #7c3aed;
+        --blue: #60a5fa;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #020817 0%, #0f172a 100%);
+        color: var(--text);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 0 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(96, 165, 250, 0.10);
+        border: 1px solid rgba(96, 165, 250, 0.35);
+        color: #dbeafe;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin: 24px 0;
+      }
+
+      .card {
+        background: rgba(17, 24, 39, 0.9);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px;
+      }
+
+      .card h3 {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .big-number {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin: 16px 0 24px;
+      }
+
+      .toolbar label {
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      select {
+        appearance: none;
+        background: var(--panel-2);
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 1rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+
+      th, td {
+        padding: 14px 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: rgba(30, 41, 59, 0.9);
+        color: var(--muted);
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      tbody tr:hover {
+        background: rgba(148, 163, 184, 0.04);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .allow { background: rgba(22, 163, 74, 0.18); color: #bbf7d0; border: 1px solid rgba(22, 163, 74, 0.4); }
+      .warn { background: rgba(251, 191, 36, 0.18); color: #fde68a; border: 1px solid rgba(251, 191, 36, 0.4); }
+      .pause { background: rgba(249, 115, 22, 0.18); color: #fed7aa; border: 1px solid rgba(249, 115, 22, 0.4); }
+      .hold { background: rgba(220, 38, 38, 0.18); color: #fecaca; border: 1px solid rgba(220, 38, 38, 0.4); }
+      .escalate { background: rgba(124, 58, 237, 0.18); color: #ddd6fe; border: 1px solid rgba(124, 58, 237, 0.4); }
+
+      .messages {
+        display: grid;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .msg {
+        background: rgba(148, 163, 184, 0.06);
+        border-left: 3px solid var(--blue);
+        padding: 8px 10px;
+        border-radius: 8px;
+        color: var(--text);
+        line-height: 1.4;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .reason-list {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .reason-list li {
+        margin: 6px 0;
+      }
+
+      .status-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--muted);
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+      }
+
+      @media (max-width: 900px) {
+        table, thead, tbody, th, td, tr { display: block; }
+        thead { display: none; }
+        tr { border-bottom: 1px solid var(--line); }
+        td {
+          border-bottom: none;
+          padding: 10px 12px;
+        }
+        td::before {
+          content: attr(data-label);
+          display: block;
+          font-size: 0.72rem;
+          color: var(--muted);
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          margin-bottom: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div>
+          <div class="tag">Senior Scam Shield • Demo</div>
+          <h1>Bank decision replay</h1>
+        </div>
+        <div class="status-row">
+          <span class="dot"></span>
+          <span>Live data shown from sample replay</span>
+        </div>
+      </header>
+
+      <section class="summary" id="summary"></section>
+
+      <div class="toolbar">
+        <label for="customerFilter">Customer</label>
+        <select id="customerFilter">
+          <option value="all">All customers</option>
+        </select>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Customer</th>
+            <th>What happened</th>
+            <th>Action</th>
+            <th>Why</th>
+            <th>Messages</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <script>
+      const sampleDecisions = [
+        {
+          "customer": { "customer_id": "C1", "name": "Margaret Hill", "age": 78, "opted_in": true },
+          "event": { "event_id": "C1-E101", "customer_id": "C1", "timestamp": "2026-10-19T10:05:00", "type": "internal_transfer", "channel": "online", "amount": 150000, "from_account": "investment", "to_account": "checking", "payee_id": null, "payee_name": null, "payee_category": null, "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "scam" },
+          "decision": { "event_id": "C1-E101", "customer_id": "C1", "timestamp": "2026-10-19T10:05:00", "action": "warn", "triggers_fired": ["T1"], "chain": ["T1"], "intervention_active": false, "risk_score": 20, "reasons": ["Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)"], "messages": { "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.", "staff": null, "family": null }, "money_released": true }
+        },
+        {
+          "customer": { "customer_id": "C4", "name": "David Chen", "age": 67, "opted_in": true },
+          "event": { "event_id": "C4-E101", "customer_id": "C4", "timestamp": "2026-10-19T13:30:00", "type": "internal_transfer", "channel": "online", "amount": 120000, "from_account": "savings", "to_account": "checking", "payee_id": null, "payee_name": null, "payee_category": null, "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "normal" },
+          "decision": { "event_id": "C4-E101", "customer_id": "C4", "timestamp": "2026-10-19T13:30:00", "action": "warn", "triggers_fired": ["T1"], "chain": ["T1"], "intervention_active": false, "risk_score": 20, "reasons": ["Oct 19: $120,000 moved from savings to checking (about 100x this customer's usual transfer)"], "messages": { "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.", "staff": null, "family": null }, "money_released": true }
+        },
+        {
+          "customer": { "customer_id": "C1", "name": "Margaret Hill", "age": 78, "opted_in": true },
+          "event": { "event_id": "C1-E102", "customer_id": "C1", "timestamp": "2026-10-20T11:20:00", "type": "wire", "channel": "online", "amount": 80000, "from_account": "checking", "to_account": null, "payee_id": "P-LSB", "payee_name": "Lone Star Bullion", "payee_category": "gold_dealer", "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "scam" },
+          "decision": { "event_id": "C1-E102", "customer_id": "C1", "timestamp": "2026-10-20T11:20:00", "action": "pause", "triggers_fired": ["T2"], "chain": ["T1", "T2"], "intervention_active": false, "risk_score": 50, "reasons": ["Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)", "Oct 20: first payment to a gold dealer (Lone Star Bullion, $80,000)"], "messages": { "customer": "We've paused this payment to protect you. A member of our team will call you at the phone number we have on file.", "staff": "PAUSE: call the customer on the number on file, not one they give you. Ask: Has anyone asked you to keep this payment secret, or told you what to say to the bank?", "family": null }, "money_released": false }
+        },
+        {
+          "customer": { "customer_id": "C5", "name": "Robert Alvarez", "age": 74, "opted_in": true },
+          "event": { "event_id": "C5-E101", "customer_id": "C5", "timestamp": "2026-10-20T15:00:00", "type": "payment", "channel": "online", "amount": 3000, "from_account": "checking", "to_account": null, "payee_id": "P-HCO", "payee_name": "Heritage Coins", "payee_category": "gold_dealer", "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "normal" },
+          "decision": { "event_id": "C5-E101", "customer_id": "C5", "timestamp": "2026-10-20T15:00:00", "action": "allow", "triggers_fired": [], "chain": [], "intervention_active": false, "risk_score": 0, "reasons": ["Trusted payee, paid 3 times before"], "messages": { "customer": null, "staff": null, "family": null }, "money_released": true }
+        },
+        {
+          "customer": { "customer_id": "C4", "name": "David Chen", "age": 67, "opted_in": true },
+          "event": { "event_id": "C4-E102", "customer_id": "C4", "timestamp": "2026-10-21T09:45:00", "type": "wire", "channel": "online", "amount": 118500, "from_account": "checking", "to_account": null, "payee_id": "P-CCT", "payee_name": "Collin County Title", "payee_category": "title_escrow", "payee_verified": true, "branch_id": null, "remote_access": false, "truth": "normal" },
+          "decision": { "event_id": "C4-E102", "customer_id": "C4", "timestamp": "2026-10-21T09:45:00", "action": "allow", "triggers_fired": [], "chain": ["T1"], "intervention_active": false, "risk_score": 20, "reasons": ["Verified payee (Collin County Title)"], "messages": { "customer": null, "staff": null, "family": null }, "money_released": true }
+        },
+        {
+          "customer": { "customer_id": "C6", "name": "Linda Park", "age": 69, "opted_in": false },
+          "event": { "event_id": "C6-E101", "customer_id": "C6", "timestamp": "2026-10-21T12:10:00", "type": "cash_withdrawal", "channel": "branch", "amount": 20000, "from_account": "checking", "to_account": null, "payee_id": null, "payee_name": null, "payee_category": null, "payee_verified": false, "branch_id": "BR-PLANO-1", "remote_access": false, "truth": "normal" },
+          "decision": { "event_id": "C6-E101", "customer_id": "C6", "timestamp": "2026-10-21T12:10:00", "action": "warn", "triggers_fired": ["T1"], "chain": ["T1"], "intervention_active": false, "risk_score": 20, "reasons": ["Oct 21: $20,000 cash withdrawal (about 67x their usual)"], "messages": { "customer": "Reminder: your bank, the police and government agencies will never ask you to move money to keep it safe, buy gold, or hand cash to a courier.", "staff": null, "family": null }, "money_released": true }
+        },
+        {
+          "customer": { "customer_id": "C1", "name": "Margaret Hill", "age": 78, "opted_in": true },
+          "event": { "event_id": "C1-E103", "customer_id": "C1", "timestamp": "2026-10-22T14:00:00", "type": "wire", "channel": "online", "amount": 60000, "from_account": "checking", "to_account": null, "payee_id": "P-LSB", "payee_name": "Lone Star Bullion", "payee_category": "gold_dealer", "payee_verified": false, "branch_id": null, "remote_access": false, "truth": "scam" },
+          "decision": { "event_id": "C1-E103", "customer_id": "C1", "timestamp": "2026-10-22T14:00:00", "action": "hold", "triggers_fired": ["T2", "T3", "T5"], "chain": ["T1", "T2", "T3"], "intervention_active": true, "risk_score": 95, "reasons": ["Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)", "Oct 20: first payment to a gold dealer (Lone Star Bullion, $80,000)", "Oct 22: another large outflow within 2 days ($140,000 in the last 7 days)", "Oct 22: new attempt to move money after the bank already stepped in"], "messages": { "customer": "This payment is on a short hold while we make sure you are safe. We will call you today.", "staff": "HOLD: senior scam pattern. Call the customer, then the trusted contact. Do not release funds until verified.", "family": "Hi Susan, Margaret asked us to let you know if something looked unusual. Please check in with them today." }, "money_released": false }
+        },
+        {
+          "customer": { "customer_id": "C1", "name": "Margaret Hill", "age": 78, "opted_in": true },
+          "event": { "event_id": "C1-E104", "customer_id": "C1", "timestamp": "2026-10-23T10:30:00", "type": "cash_withdrawal", "channel": "branch", "amount": 40000, "from_account": "checking", "to_account": null, "payee_id": null, "payee_name": null, "payee_category": null, "payee_verified": false, "branch_id": "BR-FRISCO-3", "remote_access": false, "truth": "scam" },
+          "decision": { "event_id": "C1-E104", "customer_id": "C1", "timestamp": "2026-10-23T10:30:00", "action": "escalate", "triggers_fired": ["T1", "T3", "T5"], "chain": ["T1", "T2", "T3"], "intervention_active": true, "risk_score": 95, "reasons": ["Oct 19: $150,000 moved from investment to checking (about 150x this customer's usual transfer)", "Oct 20: first payment to a gold dealer (Lone Star Bullion, $80,000)", "Oct 23: another large outflow within 1 day ($180,000 in the last 7 days)", "Oct 23: new attempt to move money after the bank already stepped in (cash at a different branch)"], "messages": { "customer": "This payment is still on hold. A branch manager will contact you personally.", "staff": "ESCALATE: repeated attempts after a hold. Manager review required. Consider an Adult Protective Services referral.", "family": "Hi Susan, Margaret asked us to let you know if something looked unusual. Please check in with them today." }, "money_released": false }
+        }
+      ];
+
+      const summaryEl = document.getElementById('summary');
+      const rowsEl = document.getElementById('rows');
+      const filterEl = document.getElementById('customerFilter');
+
+      const customers = [...new Set(sampleDecisions.map(d => d.customer.customer_id))].sort();
+      customers.forEach(id => {
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = id;
+        filterEl.appendChild(option);
+      });
+
+      function formatMoney(value) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+      }
+
+      function formatEventText(event) {
+        const typeLabel = event.type.replace(/_/g, ' ');
+        if (event.type === 'cash_withdrawal') {
+          return `${typeLabel} of ${formatMoney(event.amount)} at ${event.branch_id}`;
+        }
+        if (event.type === 'wire' || event.type === 'payment') {
+          return `${typeLabel} to ${event.payee_name || 'a payee'} (${formatMoney(event.amount)})`;
+        }
+        if (event.type === 'internal_transfer') {
+          return `${typeLabel} ${formatMoney(event.amount)} from ${event.from_account} to ${event.to_account}`;
+        }
+        return `${typeLabel} ${formatMoney(event.amount)}`;
+      }
+
+      function renderSummary(data) {
+        const allowed = data.filter(d => d.decision.action === 'allow').length;
+        const warned = data.filter(d => d.decision.action === 'warn').length;
+        const paused = data.filter(d => d.decision.action === 'pause').length;
+        const held = data.filter(d => d.decision.action === 'hold').length;
+        const escalated = data.filter(d => d.decision.action === 'escalate').length;
+
+        const cards = [
+          { label: 'Events', value: data.length },
+          { label: 'Allowed', value: allowed },
+          { label: 'Warned', value: warned },
+          { label: 'Paused', value: paused },
+          { label: 'Held', value: held },
+          { label: 'Escalated', value: escalated }
+        ];
+
+        summaryEl.innerHTML = cards.map(card => `
+          <div class="card">
+            <h3>${card.label}</h3>
+            <div class="big-number">${card.value}</div>
+          </div>
+        `).join('');
+      }
+
+      function renderRows(data) {
+        rowsEl.innerHTML = data.map(item => {
+          const action = item.decision.action;
+          const event = item.event;
+          const messageMap = item.decision.messages || {};
+          const customerMessage = messageMap.customer || '—';
+          const staffMessage = messageMap.staff || '—';
+          const familyMessage = messageMap.family || '—';
+
+          const reasons = (item.decision.reasons || []).map(r => `<li>${r}</li>`).join('');
+
+          return `
+            <tr>
+              <td data-label="Day">${new Date(event.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
+              <td data-label="Customer">
+                <strong>${item.customer.name}</strong><br />
+                <span class="muted">${item.customer.customer_id} · age ${item.customer.age}</span>
+              </td>
+              <td data-label="What happened">
+                <div><strong>${event.type.replace(/_/g, ' ')}</strong></div>
+                <div class="muted">${formatEventText(event)}</div>
+              </td>
+              <td data-label="Action">
+                <span class="badge ${action}">${action}</span>
+              </td>
+              <td data-label="Why">
+                <ul class="reason-list">${reasons}</ul>
+              </td>
+              <td data-label="Messages">
+                <div class="messages">
+                  <div class="msg"><strong>Customer:</strong> ${customerMessage}</div>
+                  <div class="msg"><strong>Staff:</strong> ${staffMessage}</div>
+                  <div class="msg"><strong>Family:</strong> ${familyMessage}</div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      function applyFilter() {
+        const selected = filterEl.value;
+        const filtered = selected === 'all'
+          ? sampleDecisions
+          : sampleDecisions.filter(d => d.customer.customer_id === selected);
+
+        renderSummary(filtered);
+        renderRows(filtered);
+      }
+
+      filterEl.addEventListener('change', applyFilter);
+      applyFilter();
+    </script>
+  </body>
+</html>
