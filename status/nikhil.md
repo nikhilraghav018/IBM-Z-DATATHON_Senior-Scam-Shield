@@ -11,6 +11,11 @@ Next: <what you're starting>
 Blocked on: <nothing, or what you need and from whom>
 -->
 
+## 5:05 PM: Done: ML risk score notebook (runs end to end on a laptop)
+`ml/scam_risk_model.ipynb`: 6,000 synthetic customers (2% scam victims), scikit-learn gradient boosting + a Keras network, trained on two scam types and tested on the unseen third at the rules' false-alarm budget. Laptop result: network catches gold bar 41/44, grandparent 50/50, phantom hacker 21/34 (gradient boosting 29/34) at 0.3 to 0.7% false alarms. Exported to `ml/model.json` + a plain-Python scorer. Engine tests pass, actions unchanged. Not wired into the live API (Kamali is recording).
+Next: run the notebook in Jupyter on LinuxONE, screenshots, Telum timing
+Blocked on: nothing
+
 ## 3:25 PM: Done: LinuxONE serves the real scenarios
 Redeployed with Shums's 8 scenario files. `POST http://148.100.77.223:8000/demo/replay` returns 18 live decisions from the real engine: gold bar warn, pause, hold, escalate; grandparent reaches hold; phantom hacker pause, hold, escalate; all 5 innocents only allow/warn. Same result locally and on the server, identical on every replay. 40 tests pass, `data/validate.py` passes.
 Next: on call for redeploys if engine or data changes before judging
