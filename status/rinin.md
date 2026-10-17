@@ -10,7 +10,19 @@ Keep it short. "Blocked on" is the important line: if you're stuck, say so here.
 Next: <what you're starting>
 Blocked on: <nothing, or what you need and from whom>
 -->
+## 6:28 PM Sat Oct 17
 
+**Done:**
+- decisions.json regenerated from real scenarios, pushed
+- Reveal label fix ("being scammed this week") confirmed in index.html
+- Rebased over Nikhil's ML merge (PR #5), no conflicts
+- All demo page features committed: scam reveal, day-one result line, privacy note, score explanation
+
+**Next:**
+- Retake evidence screenshot 03 against merged page (low priority)
+- Available for questions from Nikhil/Kamali on engine or submission fields
+
+**Blocked on:** nothing
 ## 3:50 PM: Done: merged the two demo pages into one
 Shums and I had both built `demo/index.html`. Combined them rather than picking: his row layout and
 always-visible messages (better for a recording, where nobody can click), my palette and the
