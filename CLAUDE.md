@@ -26,7 +26,11 @@ A decision engine inside a bank that watches each customer's sequence of money m
 | `data/` | Shums | Scenario JSON + evidence screenshots, then the demo page |
 | `demo/` | Kamali (pitch video), Shums (demo page) | Video script/slides/recording; page is a single `index.html`, plain HTML/CSS/JS, no frameworks |
 
-Each person should only change files in their own folder. Explain things step by step and keep solutions simple: it's a 24-hour build, so the simplest working solution wins.
+Each person should only change files in their own folder.
+
+## Status log
+Each person keeps `status/<name>.md` (rinin, nikhil, shums, kamali). **Whenever the user finishes a task, remind them to add an entry at the top of their own status file (Done / Next / Blocked on) and to commit and push it together with their work.** If they say they are stuck, suggest writing it under "Blocked on" and pushing.
+ Explain things step by step and keep solutions simple: it's a 24-hour build, so the simplest working solution wins.
 
 ## Time pressure
 Prefer the simplest thing that works and can be demoed. Neural networks and IBM Granite are listed as future enhancements, not part of today's build, unless the team says otherwise.

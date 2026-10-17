@@ -50,10 +50,11 @@ Each folder has its own `README.md` with a checklist and a ready-made prompt for
 
 ## Working rules
 
-1. **Only edit files in your own folder.** Changes to `docs/` get announced in the team chat first.
-2. Work on a branch named after you (`git checkout -b rinin`), push it, and open a pull request into `main`.
-3. Before starting anything new: `git pull origin main`.
-4. **Never commit** the `.pem` key, the Jupyter token, or any password. `.gitignore` blocks the common ones, but check `git status` before every commit.
+1. **Log your progress** in `status/<your name>.md` every time you finish a task (Done / Next / Blocked on). See [`status/README.md`](status/README.md).
+2. **Only edit files in your own folder.** Changes to `docs/` get announced in the team chat first.
+3. Work on a branch named after you (`git checkout -b rinin`), push it, and open a pull request into `main`.
+4. Before starting anything new: `git pull origin main`.
+5. **Never commit** the `.pem` key, the Jupyter token, or any password. `.gitignore` blocks the common ones, but check `git status` before every commit.
 
 ## Running it (filled in as pieces land)
 
