@@ -32,6 +32,7 @@ class FakeEngine:
 @pytest.fixture
 def stub_client(monkeypatch):
     monkeypatch.setattr(main, "Engine", None)
+    monkeypatch.setattr(main, "ENGINE_MODE", "stub")
     monkeypatch.setattr(main, "state", main.State())
     return TestClient(main.app)
 
@@ -134,3 +135,23 @@ def test_engine_replay_runs_scenarios(engine_client):
     assert items[0]["event"]["truth"] == "scam"  # the demo page still gets the truth label
     assert all(i["decision"]["action"] == "warn" for i in items)
     assert len(engine_client.get("/customers/C1/timeline").json()) == len(LIVE)
+
+
+def test_broken_scenario_file_is_skipped(engine_client):
+    (main.SCENARIOS_DIR / "broken.json").write_text('{"scenario": "oops",')
+    r = engine_client.post("/demo/replay")
+    assert r.status_code == 200
+    assert len(r.json()) == len(LIVE)
+
+
+def test_real_engine_gold_bar(monkeypatch, tmp_path):
+    """End to end with Rinin's engine: the gold bar story goes warn, pause, hold, escalate."""
+    real_engine = pytest.importorskip("engine.engine")
+    monkeypatch.setattr(main, "Engine", real_engine.Engine)
+    monkeypatch.setattr(main, "ENGINE_MODE", "real")
+    (tmp_path / "gold_bar.json").write_text(json.dumps(EXAMPLE))
+    monkeypatch.setattr(main, "SCENARIOS_DIR", tmp_path)
+    client = TestClient(main.app)
+    items = client.post("/demo/replay").json()
+    assert [i["decision"]["action"] for i in items] == ["warn", "pause", "hold", "escalate"]
+    assert client.post("/demo/replay").json() == items  # same answer every replay

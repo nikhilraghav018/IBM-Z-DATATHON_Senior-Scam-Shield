@@ -11,6 +11,11 @@ Next: <what you're starting>
 Blocked on: <nothing, or what you need and from whom>
 -->
 
+## 1:40 PM: Done: API works with Rinin's real engine
+Fixed the `test_health` failure Rinin reported (stub test now forces stub mode). Added an end-to-end test: gold bar through the API with the real engine gives warn, pause, hold, escalate, and the same answer on every replay. A scenario file with broken JSON is now skipped instead of crashing `/demo/replay`. 40 tests pass (api + engine).
+Next: build and run the Docker image on LinuxONE, screenshot `/health` showing s390x
+Blocked on: nothing. Shums: until real files land in `data/scenarios/`, `/demo/replay` returns the sample decisions.
+
 ## 12:30 PM: Starting
 Next: FastAPI `/health` running in Docker on LinuxONE, then `/demo/replay` with a hard-coded response
 Blocked on: nothing
