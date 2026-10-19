@@ -16,7 +16,7 @@ Bank fraud checks ask "is this really the customer?" In a senior scam the answer
 Full rules: [`docs/DECISION_SPEC.md`](docs/DECISION_SPEC.md)
 
 ## Demo
-https://github.com/nikhilraghav018/IBM-Z-DATATHON_Senior-Scam-Shield/raw/main/demo/demo.mp4
+[https://github.com/nikhilraghav018/IBM-Z-DATATHON_Senior-Scam-Shield/raw/main/demo/demo.mp4](https://github.com/user-attachments/assets/0f98d545-9dd2-4d2e-ac9d-c4f28eba88d9)
 
 ## Scenarios we demo
 
